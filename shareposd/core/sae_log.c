@@ -87,9 +87,6 @@ sae_void_t sae_log_destroy(sae_log_t *log)
     sae_alloc_free(log);
 }
 
-/*special process global arg*/
-static sae_log_t *sae_log_gl = sae_null;
-
 sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t logtype, sae_cchar_t *format, ...)
 {
     va_list arg_list;
@@ -105,15 +102,11 @@ sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t logtype, sae_cchar_t *fo
     /*special process log*/
     if (!log)
     {
-        if (!sae_log_gl)
-        {
 #if (HAVE_WIN32)
-            sae_log_gl = sae_log_create("./SAE_LOG");
+        sae_log_gl = sae_log_create("./SAE_LOG");
 #else
-            sae_log_gl = sae_log_create(".\\SAE_LOG");
+        sae_log_gl = sae_log_create(".\\SAE_LOG");
 #endif
-        }
-        
         log = sae_log_gl;
     }
     

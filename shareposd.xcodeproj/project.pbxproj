@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		CC645C2F1D9FBBB600E32EB1 /* sae_array.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C071D9FBBB600E32EB1 /* sae_array.c */; };
-		CC645C411D9FBBB600E32EB1 /* sae_main.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C2D1D9FBBB600E32EB1 /* sae_main.c */; };
 		CC645C661D9FC4D200E32EB1 /* sae_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C641D9FC4D200E32EB1 /* sae_alloc.c */; };
 		CC645C691D9FD6E300E32EB1 /* sae_file.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C671D9FD6E300E32EB1 /* sae_file.c */; };
 		CC645C6C1D9FE1A700E32EB1 /* sae_log.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C6A1D9FE1A700E32EB1 /* sae_log.c */; };
@@ -21,6 +20,8 @@
 		CC994EFC1DACCB9800048BE0 /* sae_res.c in Sources */ = {isa = PBXBuildFile; fileRef = CC994EFA1DACCB9800048BE0 /* sae_res.c */; };
 		CC994F1A1DADEA8A00048BE0 /* sae_event.c in Sources */ = {isa = PBXBuildFile; fileRef = CC994F181DADEA8A00048BE0 /* sae_event.c */; };
 		CC994F1E1DAF284300048BE0 /* sae_kqueue.c in Sources */ = {isa = PBXBuildFile; fileRef = CC994F1D1DAF284300048BE0 /* sae_kqueue.c */; };
+		CCB0A1B71DE16AB1002582A8 /* sae_epoll.c in Sources */ = {isa = PBXBuildFile; fileRef = CCB0A1B61DE16AB1002582A8 /* sae_epoll.c */; };
+		CCC176721DE0585D0013E5D5 /* sae_main.c in Sources */ = {isa = PBXBuildFile; fileRef = CCC176711DE0585D0013E5D5 /* sae_main.c */; };
 		CCD4C4871DA897C1000630A5 /* sae_connection.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C4851DA897C1000630A5 /* sae_connection.c */; };
 		CCD4C48A1DA8A3AA000630A5 /* sae_cycle.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C4881DA8A3AA000630A5 /* sae_cycle.c */; };
 		CCD4C48D1DAA07B8000630A5 /* sae_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C48B1DAA07B8000630A5 /* sae_socket.c */; };
@@ -44,7 +45,6 @@
 		CC645C081D9FBBB600E32EB1 /* sae_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_array.h; path = core/sae_array.h; sourceTree = "<group>"; };
 		CC645C0D1D9FBBB600E32EB1 /* sae_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_config.h; path = core/sae_config.h; sourceTree = "<group>"; };
 		CC645C101D9FBBB600E32EB1 /* sae_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_core.h; path = core/sae_core.h; sourceTree = "<group>"; };
-		CC645C2D1D9FBBB600E32EB1 /* sae_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_main.c; path = core/sae_main.c; sourceTree = "<group>"; };
 		CC645C641D9FC4D200E32EB1 /* sae_alloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_alloc.c; path = core/sae_alloc.c; sourceTree = "<group>"; };
 		CC645C651D9FC4D200E32EB1 /* sae_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_alloc.h; path = core/sae_alloc.h; sourceTree = "<group>"; };
 		CC645C671D9FD6E300E32EB1 /* sae_file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_file.c; path = core/sae_file.c; sourceTree = "<group>"; };
@@ -76,7 +76,9 @@
 		CC994F181DADEA8A00048BE0 /* sae_event.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_event.c; path = event/sae_event.c; sourceTree = "<group>"; };
 		CC994F191DADEA8A00048BE0 /* sae_event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_event.h; path = event/sae_event.h; sourceTree = "<group>"; };
 		CC994F1D1DAF284300048BE0 /* sae_kqueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_kqueue.c; path = event/modules/sae_kqueue.c; sourceTree = "<group>"; };
-		CC994F1F1DAF290C00048BE0 /* sae_modules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sae_modules.h; path = event/modules/sae_modules.h; sourceTree = "<group>"; };
+		CCB0A1B61DE16AB1002582A8 /* sae_epoll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_epoll.c; path = event/modules/sae_epoll.c; sourceTree = "<group>"; };
+		CCC176701DE053310013E5D5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = core/config.h; sourceTree = "<group>"; };
+		CCC176711DE0585D0013E5D5 /* sae_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sae_main.c; sourceTree = "<group>"; };
 		CCD4C4841DA894E3000630A5 /* sae_crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_crc.h; path = core/sae_crc.h; sourceTree = "<group>"; };
 		CCD4C4851DA897C1000630A5 /* sae_connection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_connection.c; path = core/sae_connection.c; sourceTree = "<group>"; };
 		CCD4C4861DA897C1000630A5 /* sae_connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_connection.h; path = core/sae_connection.h; sourceTree = "<group>"; };
@@ -142,8 +144,8 @@
 		CC994F1C1DADEB8B00048BE0 /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				CCB0A1B61DE16AB1002582A8 /* sae_epoll.c */,
 				CC994F1D1DAF284300048BE0 /* sae_kqueue.c */,
-				CC994F1F1DAF290C00048BE0 /* sae_modules.h */,
 			);
 			name = modules;
 			sourceTree = "<group>";
@@ -151,8 +153,8 @@
 		CCF48D271D969896003F2611 = {
 			isa = PBXGroup;
 			children = (
-				CCF48D321D969896003F2611 /* shareposd */,
 				CCF48D311D969896003F2611 /* Products */,
+				CCF48D321D969896003F2611 /* shareposd */,
 			);
 			sourceTree = "<group>";
 		};
@@ -172,6 +174,7 @@
 				CC645C061D9FBBA600E32EB1 /* http */,
 				CC645C041D9FBB9900E32EB1 /* os */,
 				CC645C6D1D9FE50600E32EB1 /* test */,
+				CCC176711DE0585D0013E5D5 /* sae_main.c */,
 			);
 			path = shareposd;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 		CCF48D3A1D9698A7003F2611 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				CCC176701DE053310013E5D5 /* config.h */,
 				CC645C641D9FC4D200E32EB1 /* sae_alloc.c */,
 				CC645C651D9FC4D200E32EB1 /* sae_alloc.h */,
 				CC645C071D9FBBB600E32EB1 /* sae_array.c */,
@@ -212,7 +216,6 @@
 				CC645C861DA3788200E32EB1 /* sae_thread.h */,
 				CCD4C48E1DAA0904000630A5 /* sae_times.c */,
 				CCD4C48F1DAA0904000630A5 /* sae_times.h */,
-				CC645C2D1D9FBBB600E32EB1 /* sae_main.c */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -243,7 +246,7 @@
 		CCF48D281D969896003F2611 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = liuhanchong;
 				TargetAttributes = {
 					CCF48D2F1D969896003F2611 = {
@@ -275,17 +278,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC645C711DA0DA4100E32EB1 /* sae_string.c in Sources */,
+				CCB0A1B71DE16AB1002582A8 /* sae_epoll.c in Sources */,
 				CCD4C48A1DA8A3AA000630A5 /* sae_cycle.c in Sources */,
 				CC645C6C1D9FE1A700E32EB1 /* sae_log.c in Sources */,
 				CC645C871DA3788200E32EB1 /* sae_thread.c in Sources */,
 				CC645C781DA223C200E32EB1 /* sae_list.c in Sources */,
 				CCD4C48D1DAA07B8000630A5 /* sae_socket.c in Sources */,
+				CCC176721DE0585D0013E5D5 /* sae_main.c in Sources */,
 				CC645C2F1D9FBBB600E32EB1 /* sae_array.c in Sources */,
 				CCD4C4871DA897C1000630A5 /* sae_connection.c in Sources */,
 				CC645C7B1DA22CAD00E32EB1 /* sae_table.c in Sources */,
 				CC645C921DA3CD9300E32EB1 /* sae_parse.c in Sources */,
 				CC645C831DA275D000E32EB1 /* sae_heap.c in Sources */,
-				CC645C411D9FBBB600E32EB1 /* sae_main.c in Sources */,
 				CC645C661D9FC4D200E32EB1 /* sae_alloc.c in Sources */,
 				CC994F1E1DAF284300048BE0 /* sae_kqueue.c in Sources */,
 				CC645C691D9FD6E300E32EB1 /* sae_file.c in Sources */,
@@ -316,6 +320,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -363,6 +368,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

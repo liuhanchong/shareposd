@@ -41,13 +41,7 @@ sae_void_t sae_array_destroy(sae_array_t *array)
 
 sae_void_t *sae_array_push(sae_array_t *array)
 {
-    if (array->nelts >= array->nalloc)
-    {
-        return sae_null;
-    }
-    
-    ++(array->nelts);
-    return ((sae_char_t *)array->elts + ((array->nelts - 1) * array->size));
+    return sae_array_push_index(array, array->nelts);
 }
 
 sae_void_t *sae_array_value_get(sae_array_t *array, sae_uint_t index)

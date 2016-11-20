@@ -19,6 +19,6 @@
 /*0-src=dest 1-< -1>*/
 sae_short_t sae_times_timeval_cmp(struct timeval *src, struct timeval *dest);
 
-void sae_times_timeval_to_timespec(struct timeval *tv, struct timespec *ts);
+sae_void_t sae_times_timeval_to_timespec(struct timeval *tv, struct timespec *ts);
 
 #endif /* _SAE_TIMES_H_INCLUDED_ */

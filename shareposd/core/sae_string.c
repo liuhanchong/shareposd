@@ -108,7 +108,7 @@ sae_char_t *sae_int_to_str(sae_int_t v)
     sae_size_t len = (v > 0) ? 1 : 2;
     sae_int_t t = (v > 0) ? v : -v;
     
-    while ((t / 10) && (len++));
+    while ((++len) && (t = (t / 10)));
     
     sae_char_t *buf = sae_alloc(len);
     

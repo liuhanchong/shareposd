@@ -34,6 +34,8 @@ sae_bool_t sae_list_empty(sae_list_t *list);
 
 sae_bool_t sae_list_del_value(sae_list_t *list, sae_void_t *data);
 
+sae_bool_t sae_list_clear(sae_list_t *list);
+
 #define sae_list_for(list, node) \
     for ((node) = ((list)->head); (node); (node) = ((node)->next))
 

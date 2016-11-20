@@ -109,7 +109,7 @@ sae_bool_t sae_open_listening_sockets(sae_cycle_core_t *cycle)
             }
 #endif
             /*set reuse addr*/
-            if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const void *)&reuseaddr, sizeof(int)) == -1)
+            if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const sae_void_t *)&reuseaddr, sizeof(sae_int_t)) == -1)
             {
                 sae_log(LERROR, "setsockopt(SO_REUSEADDR) %s failed, sock %d", listens[i].addr_text, s);
                 sae_socket_close(s);

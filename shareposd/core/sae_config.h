@@ -147,7 +147,7 @@ typedef sae_char_t sae_parse_char_t;
 
 /*connection*/
 #if (HAVE_WIN32)
-typedef SOCKET sae_connection_socket_t;
+typedef SOCKET sae_socket_fd_t;
 typedef ULONG sae_in_addr_t;
 typedef u_short sae_in_port_t;
 #else
@@ -176,5 +176,10 @@ typedef struct sae_cycle_conf_s sae_cycle_conf_t;
 typedef struct sigaction sae_signal_t;
 #define SAE_SIGNAL_NUM 65
 #endif
+
+#include <assert.h>
+
+/*depend auto config compile generate config*/
+#include "config.h"
 
 #endif /* _SAE_CONFIG_H_INCLUDED_ */

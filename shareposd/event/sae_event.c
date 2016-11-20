@@ -72,7 +72,7 @@ static struct timeval sae_event_timer_min_get(sae_event_base_t *base, struct tim
     }
     
     min_timer = event->event_timer_end;
-    if ((min_timer.tv_sec -= time(NULL)) < 0)
+    if ((min_timer.tv_sec -= time(sae_null)) < 0)
     {
         sae_memzero(&min_timer, sae_sizeof(struct timeval));
     }
@@ -123,7 +123,7 @@ static sae_bool_t sae_event_signal_active_get(sae_event_base_t *base)
 static sae_bool_t sae_event_timer_active_get(sae_event_base_t *base)
 {
     sae_uint_t i = 0;
-    struct timeval tv = {time(NULL), 0};
+    struct timeval tv = {time(sae_null), 0};
     sae_event_t *event = sae_null;
     
     for (i = 0; i < sae_heap_size_get(base->event_heap_timer); i++)
@@ -134,7 +134,7 @@ static sae_bool_t sae_event_timer_active_get(sae_event_base_t *base)
         {
             if (event->event_flag & SAE_EVENT_PERSIST)
             {
-                event->event_timer_end.tv_sec = time(NULL) + event->event_timer_wait.tv_sec;
+                event->event_timer_end.tv_sec = time(sae_null) + event->event_timer_wait.tv_sec;
             }
             
             sae_event_active(event);
@@ -241,7 +241,7 @@ sae_bool_t sae_event_del(sae_event_t *event)
     else if (event->event_flag & SAE_EVENT_READ ||
              event->event_flag & SAE_EVENT_WRITE)
     {
-        if (!event->event_base->event_base_module_select->del(event, NULL))
+        if (!event->event_base->event_base_module_select->del(event, event->event_base->event_base_module_select_instance))
         {
             sae_log(LERROR, "%s->%s failed clientsock=%d errno=%d", "sae_event_del", "del", event->event_fd, errno);
         }
@@ -269,8 +269,10 @@ sae_void_t sae_event_free(sae_event_t *event)
     sae_alloc_free(event);
 }
 
-sae_event_base_t *sae_event_base_create(sae_event_top_t *module)
+sae_event_base_t *sae_event_base_create(sae_event_top_t *module, sae_event_base_handle_call_back call)
 {
+    assert(module && call);
+    
     sae_event_t *event = sae_null;
     sae_event_base_t *base = sae_null;
     
@@ -344,6 +346,9 @@ sae_event_base_t *sae_event_base_create(sae_event_top_t *module)
         return sae_null;
     }
     
+    /*event handle call*/
+    base->event_base_handle_call = call;
+    
     base->event_base_work = sae_true;
     
     /*add socket pair read event*/
@@ -366,21 +371,142 @@ sae_event_base_t *sae_event_base_create(sae_event_top_t *module)
         return sae_null;
     }
     
+    base->event_signal_call_stop = event;
+    
     return base;
 }
 
 sae_void_t sae_event_base_destroy(sae_event_base_t *base)
 {
+    /*note 
+        all event alloc and free must be user operate*/
+    
     /*destroy sock_pair*/
     sae_event_del(base->event_signal_sock_pair_read);
+    sae_event_free(base->event_signal_sock_pair_read);
     sae_socket_close(base->event_signal_sock_pair[0]);
     sae_socket_close(base->event_signal_sock_pair[1]);
     
     base->event_base_module_select->destroy(base, base->event_base_module_select_instance);
     
     sae_list_destroy(base->event_list_active);
+    
+    sae_event_del(base->event_signal_call_stop);
+    sae_event_free(base->event_signal_call_stop);
     sae_list_destroy(base->event_list_signal);
+    
     sae_heap_destroy(base->event_heap_timer);
     sae_table_destroy(base->event_table_socket);
     sae_alloc_free(base);
+}
+
+static sae_bool_t sae_event_base_handle(sae_event_base_t *base)
+{
+    sae_event_t *event = sae_null;
+    sae_list_node_t *node = sae_null;
+    
+    sae_list_for(base->event_list_active, node)
+    {
+        event = node->data;
+        
+        /*event signal reset, internal process*/
+        if (event->event_flag & SAE_EVENT_READ &&
+            event == base->event_signal_sock_pair_read)
+        {
+            event->event_call(event, sae_null);
+            continue;
+        }
+        
+        /*stop event base dispatch, internal process*/
+        if (event->event_flag & SAE_EVENT_SIGNAL &&
+            event == base->event_signal_call_stop)
+        {
+            event->event_call(event, base);
+            continue;
+        }
+        
+        if (!base->event_base_handle_call(event))
+        {
+            sae_log(LERROR, "%s->%s failed", "sae_event_base_handle", "event_base_handle_call");
+        }
+    }
+    
+    return sae_true;
+}
+
+sae_bool_t sae_event_base_dispatch(sae_event_base_t *base)
+{
+    while (base->event_base_work)
+    {
+        /*clear active list*/
+        sae_list_clear(base->event_list_active);
+        
+        /*get read write event*/
+        struct timeval min_timer = sae_event_timer_min_get(base, &base->event_base_timer_wait);
+        
+        if (!base->event_base_module_select->dispatch(base, &min_timer, base->event_base_module_select_instance))
+        {
+            sae_log(LERROR, "%s->%s failed errno:%d", "sae_event_base_dispatch", "dispatch", errno);
+            return sae_false;
+        }
+        
+        /*get timer event*/
+        if (!sae_event_timer_active_get(base))
+        {
+            sae_log(LERROR, "%s->%s failed errno:%d", "sae_event_base_dispatch", "timer or signal handle", errno);
+            return sae_false;
+        }
+        
+        /*get signal event*/
+        if (!sae_event_signal_active_get(base))
+        {
+            sae_log(LERROR, "%s->%s failed errno:%d", "sae_event_base_dispatch", "sae_event_signal_active_get", errno);
+            return sae_false;
+        }
+        
+        /*handle active event*/
+        if (!sae_event_base_handle(base))
+        {
+            sae_log(LERROR, "%s->%s failed errno:%d", "sae_event_base_dispatch", "sae_event_base_handle", errno);
+            return sae_false;
+        }
+        
+        /*test*/
+        break;
+    }
+    
+    return sae_true;
+}
+
+sae_event_top_array_t *sae_event_top_create()
+{
+    const sae_ushort_t event_top_num = 4;
+    sae_event_top_array_t *event_top_array = sae_array_create(event_top_num, sae_sizeof(sae_event_top_t));
+    if (!event_top_array)
+    {
+        return event_top_array;
+    }
+    
+#ifdef HAVE_KQUEUE
+    extern const sae_event_top_t kqueue_top;
+    sae_memcpy(sae_array_push_index(event_top_array, 0), &kqueue_top, sae_sizeof(sae_event_top_t));
+#endif
+    
+#ifdef HAVE_EPOLL
+    extern const sae_event_top_t epoll_top;
+    sae_memcpy(sae_array_push_index(event_top_array, 1), &epoll_top, sae_sizeof(sae_event_top_t));
+#endif
+    
+#ifdef HAVE_POLL
+#endif
+    
+#ifdef HAVE_SELECT
+#endif
+    
+    return event_top_array;
+}
+
+void sae_event_top_destroy(sae_event_top_array_t *array)
+{
+    sae_array_destroy(array);
 }

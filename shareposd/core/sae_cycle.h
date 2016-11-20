@@ -19,7 +19,7 @@ struct sae_cycle_core_s
 
 struct sae_cycle_conf_s
 {
-	int a;
+	sae_int_t a;
 };
 
 #endif /* _SAE_CYCLE_H_INCLUDED_ */

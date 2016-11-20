@@ -127,3 +127,13 @@ sae_bool_t sae_list_del_value(sae_list_t *list, sae_void_t *data)
     
     return sae_false;
 }
+sae_bool_t sae_list_clear(sae_list_t *list)
+{
+    
+    while (!sae_list_empty(list))
+    {
+        sae_list_del(list, list->head);
+    }
+    
+    return sae_true;
+}

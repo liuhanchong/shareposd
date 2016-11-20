@@ -26,13 +26,18 @@ struct sae_log_s
     sae_bool_t valid;
 };
 
+/*special process global arg*/
+static sae_log_t *sae_log_gl = sae_null;
+
+/*
 sae_log_t *sae_log_create();
 
 sae_void_t sae_log_destroy(sae_log_t *log);
+*/
 
 sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t logtype, sae_cchar_t *format, ...);
 
 #define sae_log(logtype, format, ...) \
-            sae_log_write(sae_null, logtype, format, ##__VA_ARGS__)
+            sae_log_write(sae_log_gl, logtype, format, ##__VA_ARGS__)
 
 #endif /* _SAE_LOG_H_INCLUDED_ */

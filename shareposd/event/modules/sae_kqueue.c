@@ -4,7 +4,9 @@
  */
 
 
-#include "sae_modules.h"
+#include "sae_event.h"
+
+#ifdef HAVE_KQUEUE
 
 typedef struct sae_kqueue_s sae_kqueue_t;
 
@@ -26,6 +28,7 @@ sae_bool_t sae_kqueue_insert(sae_kqueue_t *kq, struct kevent *kev)
     
     if (kq->event_list_change_len == kq->event_list_alloc)
     {
+        /*mem auto increate double*/
         event_list_alloc_new *= 2;
         
         if (!(event_list_new = sae_alloc_n(sae_sizeof(struct kevent), kq->event_list_alloc)))
@@ -48,6 +51,7 @@ sae_bool_t sae_kqueue_insert(sae_kqueue_t *kq, struct kevent *kev)
         kq->event_list_change = event_list_change_new;
         kq->event_list = event_list_new;
         kq->event_list_alloc = event_list_alloc_new;
+        kq->event_list_len = kq->event_list_alloc;
     }
     
     sae_memcpy(&kq->event_list_change[kq->event_list_change_len++], kev, sae_sizeof(struct kevent));
@@ -89,7 +93,7 @@ sae_void_t *sae_kqueue_create(sae_void_t *arg)
         return sae_null;
     }
 
-    kq->event_list_len = 0;
+    kq->event_list_len = kq->event_list_alloc;
     kq->event_list_change_len = 0;
 
     return kq;
@@ -158,7 +162,7 @@ sae_bool_t sae_kqueue_del(sae_event_t *event, sae_void_t *arg)
     
     flags = EV_DELETE;
     
-    EV_SET(&kev, event->event_fd, filter, flags, 0, 0, NULL);
+    EV_SET(&kev, event->event_fd, filter, flags, 0, 0, sae_null);
 
     /*del to kernel*/
     if (!sae_kqueue_insert(kq, &kev))
@@ -263,3 +267,5 @@ const sae_event_top_t kqueue_top =
     sae_kqueue_dispatch,
     sae_kqueue_destroy
 };
+
+#endif

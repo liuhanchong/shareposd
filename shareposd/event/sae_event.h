@@ -10,11 +10,33 @@
 #include "sae_config.h"
 #include "sae_core.h"
 
+/*moudle load*/
+#ifdef HAVE_SYS_EVENT_H
+#include <sys/event.h>
+#define HAVE_KQUEUE 1
+#endif
+
+#ifdef HAVE_SYS_EPOLL_H
+#include <sys/epoll.h>
+#define HAVE_EPOLL 1
+#endif
+
+#ifdef HAVE_SYS_POLL_H
+#include <sys/poll.h>
+#define HAVE_POLL 1
+#endif
+
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
+#define HAVE_SELECT 1
+#endif
+
 typedef struct sae_event_s sae_event_t;
 typedef struct sae_event_base_s sae_event_base_t;
 typedef struct sae_event_top_s sae_event_top_t;
 typedef sae_int_t sae_event_fd_t;
 typedef sae_void_t *(*sae_event_call_back)(sae_void_t *, sae_void_t *);
+typedef sae_bool_t (*sae_event_base_handle_call_back)(sae_event_t *event);
 
 struct sae_event_s
 {
@@ -45,6 +67,7 @@ struct sae_event_base_s
     sae_bool_t event_signal_state;/*flase-no trigger true-trigger*/
     sae_socket_fd_t event_signal_sock_pair[2];/*trigger signal*/
     sae_event_t *event_signal_sock_pair_read;/*save socket pair read event*/
+    sae_event_t *event_signal_call_stop;/*save stop dispatch event*/
     
     /*active event*/
     sae_list_t *event_list_active;/*active list*/
@@ -55,6 +78,7 @@ struct sae_event_base_s
     struct timeval event_base_timer_wait;/*def outtime*/
     sae_event_top_t *event_base_module_select;/*select module*/
     sae_void_t *event_base_module_select_instance;/*select module instance*/
+    sae_event_base_handle_call_back event_base_handle_call;/*event handle call*/
 };
 
 struct sae_event_top_s
@@ -66,6 +90,11 @@ struct sae_event_top_s
     sae_bool_t (*dispatch)(sae_event_base_t *, struct timeval *, sae_void_t *);
     sae_bool_t (*destroy)(sae_event_base_t *, sae_void_t *);
 };
+
+/*create event moudle*/
+typedef sae_array_t sae_event_top_array_t;
+sae_event_top_array_t *sae_event_top_create();
+void sae_event_top_destroy(sae_event_top_array_t *array);
 
 /*event flag*/
 #define SAE_EVENT_TIMER 0x01 /*timer event*/
@@ -112,8 +141,10 @@ sae_bool_t sae_event_active(sae_event_t *event);
 
 sae_void_t sae_event_free(sae_event_t *event);
 
-sae_event_base_t *sae_event_base_create(sae_event_top_t *module);
+sae_event_base_t *sae_event_base_create(sae_event_top_t *module, sae_event_base_handle_call_back call);
 
 sae_void_t sae_event_base_destroy(sae_event_base_t *base);
+
+sae_bool_t sae_event_base_dispatch(sae_event_base_t *base);
 
 #endif /* _SAE_EVENT_H_INCLUDED_ */
