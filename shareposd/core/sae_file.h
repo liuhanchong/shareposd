@@ -21,6 +21,8 @@ sae_file_t *sae_file_open(sae_cchar_t *path, sae_file_op_t op);
 
 sae_void_t sae_file_close(sae_file_t *file);
 
+sae_bool_t sae_file_fd_close(sae_file_fd_t fd);
+
 sae_size_t sae_file_read(sae_file_fd_t fd, sae_char_t *text, sae_size_t len);
 
 sae_size_t sae_file_read_line(sae_file_fd_t fd, sae_char_t *text, sae_size_t len);

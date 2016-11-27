@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <time.h>
-#include<ctype.h> 
+#include <ctype.h>
 #include <stdint.h>
 #include <sys/types.h>
 #include <stddef.h>
@@ -48,6 +48,7 @@ typedef double sae_double_t;
 typedef float sae_float_t;
 typedef uint32_t sae_uint32_t;
 typedef uint64_t sae_uint64_t;
+typedef int32_t sae_int32_t;
 
 /*sys define type*/
 typedef size_t sae_size_t;
@@ -171,6 +172,9 @@ typedef struct sae_cycle_conf_s sae_cycle_conf_t;
 /*signal*/
 #if (HAVE_WIN32)
 #error windows signal
+#include <signal.h>
+typedef sighandler_t sae_signal_t;
+#define SAE_SIGNAL_NUM 25
 #else
 #include <signal.h>
 typedef struct sigaction sae_signal_t;
@@ -181,5 +185,11 @@ typedef struct sigaction sae_signal_t;
 
 /*depend auto config compile generate config*/
 #include "config.h"
+
+#if (HAVE_WIN32)
+typedef pid_t sae_pid_t;
+#else
+typedef pid_t sae_pid_t;
+#endif
 
 #endif /* _SAE_CONFIG_H_INCLUDED_ */

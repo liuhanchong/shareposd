@@ -16,7 +16,8 @@ enum sae_log_type_e
     LERROR,
     LOTHER,
     /*add new type there, not in LDUMP back*/
-    LDUMP
+    LDUMP,
+    LEXIT /*special type, therfore not in LDUMP before add*/
 };
 
 struct sae_log_s
@@ -35,7 +36,7 @@ sae_log_t *sae_log_create();
 sae_void_t sae_log_destroy(sae_log_t *log);
 */
 
-sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t logtype, sae_cchar_t *format, ...);
+sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t log_type, sae_cchar_t *format, ...);
 
 #define sae_log(logtype, format, ...) \
             sae_log_write(sae_log_gl, logtype, format, ##__VA_ARGS__)

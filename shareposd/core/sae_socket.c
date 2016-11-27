@@ -21,7 +21,7 @@ sae_socket_fd_t sae_socket(sae_int_t domain, sae_int_t type,
     }
     
     /*init socket*/
-    s = WSASocket(domain, type, protocol, sae_null, 0, flag);
+    s = WSASocket(domain, type, protocol, sae_null, 0, WSA_FLAG_OVERLAPPED);
     if (s == INVALID_SOCKET)
     {
         WSACleanup();
@@ -49,6 +49,7 @@ sae_size_t sae_socket_recv(sae_socket_fd_t fd, sae_void_t *buf,
 {
 #if (HAVE_WIN32)
 #error sae_socket_recv
+    return recv(fd, (sae_char_t *)buf, (sae_int_t)size, flag);
 #else
     return recv(fd, buf, size, flag);
 #endif
@@ -59,9 +60,30 @@ sae_size_t sae_socket_send(sae_socket_fd_t fd, sae_void_t *buf,
 {
 #if (HAVE_WIN32)
 #error sae_socket_send
+    return send(fd, (sae_char_t *)buf, (sae_int_t)size, flag);
 #else
     return send(fd, buf, size, flag);
 #endif
+}
+
+sae_bool_t sae_socket_bind(sae_socket_fd_t fd, struct sockaddr *sock_addr, socklen_t sock_len)
+{
+    return (bind(fd, sock_addr, sock_len) != -1);
+}
+
+sae_bool_t sae_socket_listen(sae_socket_fd_t fd, sae_int_t back_log)
+{
+    return (listen(fd, back_log) != -1);
+}
+
+sae_bool_t sae_socket_connect(sae_socket_fd_t fd, struct sockaddr *sock_addr, socklen_t sock_len)
+{
+    return connect(fd, sock_addr, sock_len);
+}
+
+sae_socket_fd_t sae_socket_accept(sae_socket_fd_t fd, struct sockaddr *sock_addr, socklen_t sock_len)
+{
+    return accept(fd, sock_addr, &sock_len);
 }
 
 sae_bool_t sae_socket_close(sae_socket_fd_t fd)
@@ -86,6 +108,74 @@ sae_bool_t sae_socket_pair(sae_socket_fd_t *sock_pair)
 {
 #if (HAVE_WIN32)
 #error sae_socket_pair
+    /*create server*/
+    sae_socket_fd_t server = sae_socket(AF_INET, SOCK_STREAM, 0, WSA_FLAG_OVERLAPPED);
+    if (server == -1)
+    {
+        return sae_false;
+    }
+    
+    struct sockaddr_in sock_addr;
+    sock_addr.sin_family = AF_INET;
+    sock_addr.sin_port = 0;
+    sock_addr.sin_addr.s_addr = INADDR_ANY;
+    socklen_t sock_len = sae_size_t(sock_addr);
+    if (!sae_socket_bind(err_server, &sock_addr, sock_len))
+    {
+        sae_socket_close(server);
+        return sae_false;
+    }
+    
+    if (!sae_socket_listen(err_server, 1))
+    {
+        sae_socket_close(server);
+        return sae_false;
+    }
+    
+    /*create client*/
+    sae_socket_fd_t client = sae_socket(AF_INET, SOCK_STREAM, 0, WSA_FLAG_OVERLAPPED);
+    if (client == -1)
+    {
+        sae_socket_close(server);
+        return sae_false;
+    }
+    
+    sock_len = sae_size_t(sock_addr);
+    if (getsockname(server, &sock_addr, &sock_len) == -1)
+    {
+        sae_socket_close(client);
+        sae_socket_close(server);
+        return sae_false;
+    }
+    
+    if (sock_len != sae_size_t(sock_addr))
+    {
+        sae_socket_close(client);
+        sae_socket_close(server);
+        return sae_false;
+    }
+    
+    if (!sae_socket_connect(client, sock_addr, sock_len))
+    {
+        sae_socket_close(client);
+        sae_socket_close(server);
+        return sae_false;
+    }
+    
+    /*accept client*/
+    accept_client = sae_socket_accept(server, &sock_addr, &sock_len);
+    if (accept_client == -1)
+    {
+        sae_socket_close(client);
+        sae_socket_close(server);
+        return sae_false;
+    }
+    sae_socket_close(server);
+    
+    sock_pair[0] = client;
+    sock_pair[1] = accept_client;
+    
+    return sae_true;
 #else
     return (socketpair(AF_UNIX, SOCK_STREAM, 0, sock_pair) == -1) ? sae_false : sae_true;
 #endif

@@ -3,6 +3,7 @@
  * Copyright (C) hanchong liu
  */
 
+
 #include "sae_event.h"
 
 /*global reactor save signal event*/
@@ -25,8 +26,10 @@ static sae_short_t sae_event_timer_call_cmp(sae_heap_elt_t *src, sae_heap_elt_t 
 
 #if (HAVE_WIN32)
 #error sae_event_signal_event_call_set
+static sae_void_t sae_event_signal_event_call_set(sae_int_t sig)
 #else
 static sae_void_t sae_event_signal_event_call_set(sae_int_t sig, siginfo_t *siginfo, sae_void_t *arg)
+#endif
 {
     if (!event_base_global)
     {
@@ -45,7 +48,6 @@ static sae_void_t sae_event_signal_event_call_set(sae_int_t sig, siginfo_t *sigi
     
     sae_socket_send(event_base_global->event_signal_sock_pair[0], "a", 1, 0);
 }
-#endif
 
 static sae_void_t *sae_event_signal_call_reset(sae_void_t *event, sae_void_t *arg)
 {
@@ -197,6 +199,7 @@ sae_bool_t sae_event_add(sae_event_t *event, struct timeval *tv)
         
 #if (HAVE_WIN32)
 #error sae_event_add
+        sig = sae_event_signal_event_call_set;
 #else
         sigemptyset(&sig.sa_mask);
         sig.sa_sigaction = sae_event_signal_event_call_set;
@@ -361,11 +364,7 @@ sae_event_base_t *sae_event_base_create(sae_event_top_t *module, sae_event_base_
     
     base->event_signal_sock_pair_read = event;
     
-#if (HAVE_WIN32)
-#error sae_event_signal_set
-#else
     if (!(event = sae_event_signal_set(base, SIGTERM, 0, sae_event_base_call_stop, base)) ||
-#endif
         !sae_event_signal_add(event))
     {
         return sae_null;

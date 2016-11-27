@@ -76,11 +76,66 @@ sae_ushort_t sae_res_cpu_num_get()
 #endif
 }
 
-sae_bool_t sae_res_signal_set(sae_int_t sig, sae_signal_t *new, sae_signal_t *old)
+sae_bool_t sae_res_signal_set(sae_int_t sig, sae_signal_t *news, sae_signal_t *olds)
 {
 #if (HAVE_WIN32)
 #error sae_res_signal_set
+    return ((*olds = signal(sig, *news)) == SIG_ERR) ? sae_false : sae_true;
 #else
-    return (sigaction(sig, new, old) == -1) ? sae_false : sae_true;
+    return (sigaction(sig, news, olds) == -1) ? sae_false : sae_true;
 #endif
+}
+
+sae_pid_t sae_res_pid_get()
+{
+#if (HAVE_WIN32)
+    return getpid();
+#else
+    return getpid();
+#endif
+}
+
+sae_pid_t sae_res_process_fork()
+{
+    return fork();
+}
+
+sae_void_t sae_res_process_exit(sae_int_t status)
+{
+    exit(status);
+}
+
+sae_pid_t sae_res_session_set()
+{
+    return setsid();
+}
+
+sae_bool_t sae_res_process_deamon()
+{
+    /*fork new process*/
+    sae_pid_t pid = sae_res_process_fork();
+    if (pid > 0)
+    {
+        sae_res_process_exit(0);
+    }
+    else if (pid < 0)
+    {
+        return sae_false;
+    }
+    
+    /*set new session*/
+    pid = sae_res_session_set();
+    if (pid < 0)
+    {
+        return sae_false;
+    }
+    
+    /*set root dir, note no change*/
+    
+    /*set mask, note no change*/
+    
+    /*close fd*/
+    return (sae_file_fd_close(STDIN_FILENO)  &&
+            sae_file_fd_close(STDOUT_FILENO) &&
+            sae_file_fd_close(STDERR_FILENO)) ? sae_true : sae_false;
 }

@@ -11,7 +11,7 @@
 static sae_file_t *sae_log_file(sae_log_t *log, sae_log_type_t type)
 {
     /*get log name*/
-    sae_char_t *name = (type == LDEBUG)  ? "DEBUG" :
+    sae_char_t *name = (type == LDEBUG)   ? "DEBUG" :
                         (type == LERROR)  ? "ERROR" :
                         (type == LDUMP)   ? "DUMP"  :
                         (type == LOTHER)  ? "OTHER" :
@@ -53,6 +53,10 @@ sae_log_t *sae_log_create(sae_char_t *dir)
     {
         sae_dir_create(log->dir);
     }
+    else
+    {
+        printf("warn: create log dir is exist, log name is %s. new log file will cover old log file\n", log->dir);
+    }
     
     /*gen file*/
     for (type = LDEBUG; type <= LDUMP; type++)
@@ -60,7 +64,7 @@ sae_log_t *sae_log_create(sae_char_t *dir)
         log->files[type] = sae_log_file(log, type);
         if (!log->files[type])
         {
-            printf("create %d log failed!\n", type);
+            printf("error: create %d log failed!\n", type);
         }
     }
     
@@ -87,7 +91,7 @@ sae_void_t sae_log_destroy(sae_log_t *log)
     sae_alloc_free(log);
 }
 
-sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t logtype, sae_cchar_t *format, ...)
+sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t log_type, sae_cchar_t *format, ...)
 {
     va_list arg_list;
     sae_cint_t timer_len = 30;
@@ -95,20 +99,28 @@ sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t logtype, sae_cchar_t *fo
     time_t timer = 0;
     struct tm *strutm = sae_null;
     sae_char_t info[SAE_LOG_SIZE] = {0};
-    sae_char_t com_log[SAE_LOG_SIZE];
+    sae_char_t log_com[SAE_LOG_SIZE];
     sae_size_t len = 0;
     sae_file_t *file = sae_null;
+    sae_bool_t log_exit = sae_false;
+    
+    /*auto exit log*/
+    if (log_type == LEXIT)
+    {
+        log_type = LDEBUG;
+        log_exit = sae_true;
+    }
     
     /*special process log*/
-    if (!log)
+    if (!sae_log_gl)
     {
 #if (HAVE_WIN32)
-        sae_log_gl = sae_log_create("./SAE_LOG");
-#else
         sae_log_gl = sae_log_create(".\\SAE_LOG");
+#else
+        sae_log_gl = sae_log_create("./SAE_LOG");
 #endif
-        log = sae_log_gl;
     }
+    log = sae_log_gl;
     
     /*is printf debug log*/
 #ifndef SAE_LOG_DEBUG
@@ -130,14 +142,20 @@ sae_void_t sae_log_write(sae_log_t *log, sae_log_type_t logtype, sae_cchar_t *fo
     sae_vsnprintf(info, SAE_LOG_SIZE, format, arg_list);
     
     /*gen complete log*/
-    len = sae_snprintf(com_log, SAE_LOG_SIZE, "%s: %s\n", stimer, info);
+    len = sae_snprintf(log_com, SAE_LOG_SIZE, "%s: %s\n", stimer, info);
     
     va_end(arg_list);
     
     /*write log*/
-    file = log->files[logtype];
-    sae_file_write(file->fd, com_log, len);
+    file = log->files[log_type];
+    sae_file_write(file->fd, log_com, len);
     
     /*sync file*/
     sae_file_sync(file->fd);
+    
+    if (log_exit)
+    {
+        sae_log(LDEBUG, "log auto exit");
+        sae_log_destroy(sae_log_gl);
+    }
 }

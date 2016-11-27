@@ -33,7 +33,7 @@ sae_void_t sae_str_trim(sae_char_t *str)
 {
     sae_size_t begin = 0;
     sae_size_t end = 0;
-    sae_char_t *cpstr = sae_null;
+    sae_char_t *cp = sae_null;
     
     if ((end = sae_strlen(str)) < 1)
     {
@@ -41,19 +41,19 @@ sae_void_t sae_str_trim(sae_char_t *str)
     }
     
     /*alloc cp str*/
-    cpstr = sae_alloc(end);
+    cp = sae_alloc(end);
     
     /*cp str*/
-    sae_memcpy(cpstr, str, end);
+    sae_memcpy(cp, str, end);
                                  
     while (sae_isspace(str[begin++]));
     begin--;
     
     while (sae_isspace(str[--end]));
     
-    sae_strncpy(str, cpstr + begin, (end - begin + 1));
+    sae_strncpy(str, cp + begin, (end - begin + 1));
     
-    sae_alloc_free(cpstr);
+    sae_alloc_free(cp);
     
     str[(end - begin + 1)] = sae_str_end;
 }

@@ -32,7 +32,7 @@ struct sae_connection_listening_s
     sae_void_t *ctx;        /* sae_http_conf_ctx_t, for example */
     sae_void_t *servers;    /* array of sae_http_in_addr_t, for example */
 
-    sae_int_t backlog;
+    sae_int_t back_log;
 
     sae_size_t post_accept_buffer_size; /* should be here because
                                                   of the AcceptEx() preread */

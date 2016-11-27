@@ -128,13 +128,18 @@ sae_void_t sae_file_close(sae_file_t *file)
     
     sae_alloc_free(file->path);
     
-#if (HAVE_WIN32)
-    CloseHandle(file->fd);
-#else
-    close(file->fd);
-#endif
+    sae_file_fd_close(file->fd);
     
     sae_alloc_free(file);
+}
+
+sae_bool_t sae_file_fd_close(sae_file_fd_t fd)
+{
+#if (HAVE_WIN32)
+    return CloseHandle(fd) ? sae_true : sae_false;
+#else
+    return (close(fd) == 0) ? sae_true : sae_false;
+#endif
 }
 
 sae_size_t sae_file_read(sae_file_fd_t fd, sae_char_t *text, sae_size_t len)

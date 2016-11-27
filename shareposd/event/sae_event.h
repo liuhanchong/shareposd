@@ -7,8 +7,8 @@
 #ifndef _SAE_EVENT_H_INCLUDED_
 #define _SAE_EVENT_H_INCLUDED_
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "../core/sae_config.h"
+#include "../core/sae_core.h"
 
 /*moudle load*/
 #ifdef HAVE_SYS_EVENT_H

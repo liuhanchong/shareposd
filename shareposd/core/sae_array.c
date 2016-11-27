@@ -41,6 +41,7 @@ sae_void_t sae_array_destroy(sae_array_t *array)
 
 sae_void_t *sae_array_push(sae_array_t *array)
 {
+    /*push to head*/
     return sae_array_push_index(array, array->nelts);
 }
 

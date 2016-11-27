@@ -140,7 +140,7 @@ sae_bool_t sae_open_listening_sockets(sae_cycle_core_t *cycle)
                 continue;
             }
 
-            if (listen(s, listens[i].backlog) == -1)
+            if (listen(s, listens[i].back_log) == -1)
             {
                 sae_log(LERROR, "listen() to %s failed", listens[i].addr_text);
                 return sae_false;
