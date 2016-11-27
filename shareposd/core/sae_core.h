@@ -17,11 +17,11 @@
 #include "sae_heap.h"
 #include "sae_thread.h"
 #include "sae_parse.h"
-#include "sae_crc.h"
 #include "sae_connection.h"
 #include "sae_cycle.h"
 #include "sae_socket.h"
 #include "sae_times.h"
 #include "sae_res.h"
+#include "sae_utils.h"
 
 #endif /* _SAE_CORE_H_INCLUDED_ */

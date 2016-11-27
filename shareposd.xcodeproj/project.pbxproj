@@ -17,6 +17,7 @@
 		CC645C831DA275D000E32EB1 /* sae_heap.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C811DA275D000E32EB1 /* sae_heap.c */; };
 		CC645C871DA3788200E32EB1 /* sae_thread.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C851DA3788200E32EB1 /* sae_thread.c */; };
 		CC645C921DA3CD9300E32EB1 /* sae_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C901DA3CD9300E32EB1 /* sae_parse.c */; };
+		CC6B7F471DEAA19300B6CE13 /* sae_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = CC6B7F451DEAA19300B6CE13 /* sae_utils.c */; };
 		CC994EFC1DACCB9800048BE0 /* sae_res.c in Sources */ = {isa = PBXBuildFile; fileRef = CC994EFA1DACCB9800048BE0 /* sae_res.c */; };
 		CC994F1A1DADEA8A00048BE0 /* sae_event.c in Sources */ = {isa = PBXBuildFile; fileRef = CC994F181DADEA8A00048BE0 /* sae_event.c */; };
 		CC994F1E1DAF284300048BE0 /* sae_kqueue.c in Sources */ = {isa = PBXBuildFile; fileRef = CC994F1D1DAF284300048BE0 /* sae_kqueue.c */; };
@@ -71,6 +72,8 @@
 		CC645C901DA3CD9300E32EB1 /* sae_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_parse.c; path = core/sae_parse.c; sourceTree = "<group>"; };
 		CC645C911DA3CD9300E32EB1 /* sae_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_parse.h; path = core/sae_parse.h; sourceTree = "<group>"; };
 		CC645C931DA63A2500E32EB1 /* test_sae_parse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = test_sae_parse.h; path = test/test_sae_parse.h; sourceTree = "<group>"; };
+		CC6B7F451DEAA19300B6CE13 /* sae_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_utils.c; path = core/sae_utils.c; sourceTree = "<group>"; };
+		CC6B7F461DEAA19300B6CE13 /* sae_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_utils.h; path = core/sae_utils.h; sourceTree = "<group>"; };
 		CC994EFA1DACCB9800048BE0 /* sae_res.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_res.c; path = core/sae_res.c; sourceTree = "<group>"; };
 		CC994EFB1DACCB9800048BE0 /* sae_res.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_res.h; path = core/sae_res.h; sourceTree = "<group>"; };
 		CC994F181DADEA8A00048BE0 /* sae_event.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_event.c; path = event/sae_event.c; sourceTree = "<group>"; };
@@ -79,7 +82,6 @@
 		CCB0A1B61DE16AB1002582A8 /* sae_epoll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_epoll.c; path = event/modules/sae_epoll.c; sourceTree = "<group>"; };
 		CCC176701DE053310013E5D5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = core/config.h; sourceTree = "<group>"; };
 		CCC176711DE0585D0013E5D5 /* sae_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sae_main.c; sourceTree = "<group>"; };
-		CCD4C4841DA894E3000630A5 /* sae_crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_crc.h; path = core/sae_crc.h; sourceTree = "<group>"; };
 		CCD4C4851DA897C1000630A5 /* sae_connection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_connection.c; path = core/sae_connection.c; sourceTree = "<group>"; };
 		CCD4C4861DA897C1000630A5 /* sae_connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_connection.h; path = core/sae_connection.h; sourceTree = "<group>"; };
 		CCD4C4881DA8A3AA000630A5 /* sae_cycle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_cycle.c; path = core/sae_cycle.c; sourceTree = "<group>"; };
@@ -191,7 +193,6 @@
 				CCD4C4851DA897C1000630A5 /* sae_connection.c */,
 				CCD4C4861DA897C1000630A5 /* sae_connection.h */,
 				CC645C101D9FBBB600E32EB1 /* sae_core.h */,
-				CCD4C4841DA894E3000630A5 /* sae_crc.h */,
 				CCD4C4881DA8A3AA000630A5 /* sae_cycle.c */,
 				CCD4C4891DA8A3AA000630A5 /* sae_cycle.h */,
 				CC645C671D9FD6E300E32EB1 /* sae_file.c */,
@@ -216,6 +217,8 @@
 				CC645C861DA3788200E32EB1 /* sae_thread.h */,
 				CCD4C48E1DAA0904000630A5 /* sae_times.c */,
 				CCD4C48F1DAA0904000630A5 /* sae_times.h */,
+				CC6B7F451DEAA19300B6CE13 /* sae_utils.c */,
+				CC6B7F461DEAA19300B6CE13 /* sae_utils.h */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				CCD4C48D1DAA07B8000630A5 /* sae_socket.c in Sources */,
 				CCC176721DE0585D0013E5D5 /* sae_main.c in Sources */,
 				CC645C2F1D9FBBB600E32EB1 /* sae_array.c in Sources */,
+				CC6B7F471DEAA19300B6CE13 /* sae_utils.c in Sources */,
 				CCD4C4871DA897C1000630A5 /* sae_connection.c in Sources */,
 				CC645C7B1DA22CAD00E32EB1 /* sae_table.c in Sources */,
 				CC645C921DA3CD9300E32EB1 /* sae_parse.c in Sources */,

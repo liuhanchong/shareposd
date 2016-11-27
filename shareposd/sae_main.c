@@ -16,7 +16,7 @@ sae_bool_t handle(sae_event_t *event)
 sae_int_t main(sae_int_t argc, sae_char_t **argv)
 {
     //create deamon process
-    if (!sae_res_process_deamon())
+    if (!sae_utils_process_deamon())
     {
         sae_log(LDEBUG, "create deamon process failed");
         return EXIT_FAILURE;
