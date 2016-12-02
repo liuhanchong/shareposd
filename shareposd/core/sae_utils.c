@@ -41,3 +41,8 @@ sae_uint32_t sae_utils_crc(sae_char_t *data, sae_size_t len)
 {
     return 0;
 }
+
+sae_void_t sae_res_process_exit(sae_int_t status)
+{
+    exit(status);
+}
