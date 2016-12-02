@@ -100,11 +100,6 @@ sae_pid_t sae_res_process_fork()
     return fork();
 }
 
-sae_void_t sae_res_process_exit(sae_int_t status)
-{
-    exit(status);
-}
-
 sae_pid_t sae_res_session_set()
 {
     return setsid();
