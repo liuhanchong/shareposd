@@ -26,8 +26,6 @@ sae_pid_t sae_res_pid_get();
 
 sae_pid_t sae_res_process_fork();
 
-sae_void_t sae_res_process_exit(sae_int_t status);
-
 sae_pid_t sae_res_session_set();
 
 #endif /* _SAE_UTIL_H_INCLUDED_ */
