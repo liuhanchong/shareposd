@@ -138,7 +138,6 @@ sae_void_t *sae_table_value(sae_table_t *table, sae_char_t *key)
     sae_list_node_t *node = sae_null;
     sae_table_elt_t *elt = sae_null;
     
-    ;
     if (!(list = sae_table_list_get(table,
                                     (sae_uint_t)(sae_str_hash(key) % table->table->nalloc))))
     {
