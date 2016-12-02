@@ -13,7 +13,7 @@ sae_bool_t sae_utils_process_deamon()
     sae_pid_t pid = sae_res_process_fork();
     if (pid > 0)/*parent pro*/
     {
-        sae_res_process_exit(0);
+        sae_utils_process_exit(0);
     }
     else if (pid < 0)/*fork failed*/
     {
