@@ -9,7 +9,7 @@
 /*global reactor save signal event*/
 static sae_event_base_t *event_base_global = sae_null;
 
-static sae_void_t *sae_event_base_call_stop(sae_void_t *event, sae_void_t *arg)
+static sae_void_t *sae_event_base_call_stop(sae_event_t *event, sae_void_t *arg)
 {
     ((sae_event_base_t *)arg)->event_base_work = sae_false;
     
@@ -49,9 +49,9 @@ static sae_void_t sae_event_signal_event_call_set(sae_int_t sig, siginfo_t *sigi
     sae_socket_send(event_base_global->event_signal_sock_pair[0], "a", 1, 0);
 }
 
-static sae_void_t *sae_event_signal_call_reset(sae_void_t *event, sae_void_t *arg)
+static sae_void_t *sae_event_signal_call_reset(sae_event_t *event, sae_void_t *arg)
 {
-    sae_socket_fd_t fd = ((sae_event_t *)event)->event_fd;
+    sae_socket_fd_t fd = event->event_fd;
     sae_socket_fd_t socket_pair_fd_read = ((sae_event_t *)event)->event_base->event_signal_sock_pair[1];
     
     if (fd == socket_pair_fd_read)
@@ -114,6 +114,11 @@ static sae_bool_t sae_event_signal_active_get(sae_event_base_t *base)
             event = node->data;
             if (sig == event->event_fd)
             {
+                if (!(event->event_flag & SAE_EVENT_PERSIST))
+                {
+                    sae_event_del(event);
+                }
+                
                 sae_event_active(event);
             }
         }
@@ -137,6 +142,10 @@ static sae_bool_t sae_event_timer_active_get(sae_event_base_t *base)
             if (event->event_flag & SAE_EVENT_PERSIST)
             {
                 event->event_timer_end.tv_sec = time(sae_null) + event->event_timer_wait.tv_sec;
+            }
+            else
+            {
+                sae_event_del(event);
             }
             
             sae_event_active(event);
@@ -181,6 +190,7 @@ sae_bool_t sae_event_add(sae_event_t *event, struct timeval *tv)
             if (!sae_event_del(event_find))
             {
                 sae_log(LERROR, "sae_event_add->sae_event_del exist event failed clientsock=%d", event_find->event_fd);
+                return sae_false;
             }
         }
         
@@ -191,7 +201,10 @@ sae_bool_t sae_event_add(sae_event_t *event, struct timeval *tv)
         }
         
         /*add user level*/
-        return sae_table_push(event->event_base->event_table_socket, event->event_fd_str, event);
+        if (!sae_table_push(event->event_base->event_table_socket, event->event_fd_str, event))
+        {
+            return sae_false;
+        }
     }
     else if (event->event_flag & SAE_EVENT_SIGNAL)
     {
@@ -210,7 +223,10 @@ sae_bool_t sae_event_add(sae_event_t *event, struct timeval *tv)
             return sae_false;
         }
         
-        return sae_list_push(event->event_base->event_list_signal, event);
+        if (!sae_list_push(event->event_base->event_list_signal, event))
+        {
+            return sae_false;
+        }
     }
     else if (event->event_flag & SAE_EVENT_TIMER)
     {
@@ -219,27 +235,44 @@ sae_bool_t sae_event_add(sae_event_t *event, struct timeval *tv)
         sae_memcpy(&event->event_timer_end, tv, sae_sizeof(struct timeval));
         event->event_timer_end.tv_sec += time(sae_null);
         
-        return sae_heap_push(event->event_base->event_heap_timer, event);
+        if (!sae_heap_push(event->event_base->event_heap_timer, event))
+        {
+            return sae_false;
+        }
     }
     
-    return sae_false;
+    event->event_state = SAE_EVENT_STATE_INSERT;
+    
+    return sae_true;
 }
 
 sae_bool_t sae_event_del(sae_event_t *event)
-{    
+{
+    if (!(event->event_state & SAE_EVENT_STATE_INSERT))
+    {
+        return sae_false;
+    }
+    
     if (event->event_flag & SAE_EVENT_SIGNAL)
     {
         if (!sae_res_signal_set(event->event_fd,
                                 &event->event_signal_old, sae_null))
         {
             sae_log(LERROR, "%s->%s sigid %d failed", "sae_event_del", "sae_res_set_signal", event->event_fd);
+            return sae_false;
         }
         
-        return sae_list_del_value(event->event_base->event_list_signal, event);
+        if (!sae_list_del_value(event->event_base->event_list_signal, event))
+        {
+            return sae_false;
+        }
     }
     else if (event->event_flag & SAE_EVENT_TIMER)
     {
-        return sae_heap_del_value(event->event_base->event_heap_timer, event);
+        if (!sae_heap_del_value(event->event_base->event_heap_timer, event))
+        {
+            return sae_false;
+        }
     }
     else if (event->event_flag & SAE_EVENT_READ ||
              event->event_flag & SAE_EVENT_WRITE)
@@ -247,25 +280,35 @@ sae_bool_t sae_event_del(sae_event_t *event)
         if (!event->event_base->event_base_module_select->del(event, event->event_base->event_base_module_select_instance))
         {
             sae_log(LERROR, "%s->%s failed clientsock=%d errno=%d", "sae_event_del", "del", event->event_fd, errno);
+            return sae_false;
         }
         
-        return sae_table_del(event->event_base->event_table_socket, event->event_fd_str);
+        if (!sae_table_del(event->event_base->event_table_socket, event->event_fd_str))
+        {
+            return sae_false;
+        }
     }
     
-    return sae_false;
+    event->event_state = SAE_EVENT_STATE_DELETE;
+    
+    return sae_true;
 }
 
 sae_bool_t sae_event_active(sae_event_t *event)
 {
-    return (event) ? sae_list_push(event->event_base->event_list_active, event) : sae_false;
+    if (event->event_state & SAE_EVENT_STATE_ACTIVE)
+    {
+        return sae_false;
+    }
+    
+    event->event_state |= SAE_EVENT_STATE_ACTIVE;
+
+    return sae_list_push(event->event_base->event_list_active, event);
 }
 
 sae_void_t sae_event_free(sae_event_t *event)
 {
-    if (event->event_state & SAE_EVENT_STATE_INSERT)
-    {
-        sae_event_del(event);
-    }
+    sae_event_del(event);
     
     sae_alloc_free(event->event_fd_str);
     
@@ -381,7 +424,6 @@ sae_void_t sae_event_base_destroy(sae_event_base_t *base)
         all event alloc and free must be user operate*/
     
     /*destroy sock_pair*/
-    sae_event_del(base->event_signal_sock_pair_read);
     sae_event_free(base->event_signal_sock_pair_read);
     sae_socket_close(base->event_signal_sock_pair[0]);
     sae_socket_close(base->event_signal_sock_pair[1]);
@@ -390,7 +432,6 @@ sae_void_t sae_event_base_destroy(sae_event_base_t *base)
     
     sae_list_destroy(base->event_list_active);
     
-    sae_event_del(base->event_signal_call_stop);
     sae_event_free(base->event_signal_call_stop);
     sae_list_destroy(base->event_list_signal);
     

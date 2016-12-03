@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC36481C1DF2A76300181174 /* sae_http_packet.c in Sources */ = {isa = PBXBuildFile; fileRef = CC36481A1DF2A76300181174 /* sae_http_packet.c */; };
 		CC645C2F1D9FBBB600E32EB1 /* sae_array.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C071D9FBBB600E32EB1 /* sae_array.c */; };
 		CC645C661D9FC4D200E32EB1 /* sae_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C641D9FC4D200E32EB1 /* sae_alloc.c */; };
 		CC645C691D9FD6E300E32EB1 /* sae_file.c in Sources */ = {isa = PBXBuildFile; fileRef = CC645C671D9FD6E300E32EB1 /* sae_file.c */; };
@@ -23,6 +24,8 @@
 		CC994F1E1DAF284300048BE0 /* sae_kqueue.c in Sources */ = {isa = PBXBuildFile; fileRef = CC994F1D1DAF284300048BE0 /* sae_kqueue.c */; };
 		CCB0A1B71DE16AB1002582A8 /* sae_epoll.c in Sources */ = {isa = PBXBuildFile; fileRef = CCB0A1B61DE16AB1002582A8 /* sae_epoll.c */; };
 		CCC176721DE0585D0013E5D5 /* sae_main.c in Sources */ = {isa = PBXBuildFile; fileRef = CCC176711DE0585D0013E5D5 /* sae_main.c */; };
+		CCCEE4411DF2767500E33511 /* sae_http.c in Sources */ = {isa = PBXBuildFile; fileRef = CCCEE43F1DF2767500E33511 /* sae_http.c */; };
+		CCCEE4441DF2786500E33511 /* sae_http_request.c in Sources */ = {isa = PBXBuildFile; fileRef = CCCEE4421DF2786500E33511 /* sae_http_request.c */; };
 		CCD4C4871DA897C1000630A5 /* sae_connection.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C4851DA897C1000630A5 /* sae_connection.c */; };
 		CCD4C48A1DA8A3AA000630A5 /* sae_cycle.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C4881DA8A3AA000630A5 /* sae_cycle.c */; };
 		CCD4C48D1DAA07B8000630A5 /* sae_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C48B1DAA07B8000630A5 /* sae_socket.c */; };
@@ -42,6 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CC36481A1DF2A76300181174 /* sae_http_packet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_http_packet.c; path = http/sae_http_packet.c; sourceTree = "<group>"; };
+		CC36481B1DF2A76300181174 /* sae_http_packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_http_packet.h; path = http/sae_http_packet.h; sourceTree = "<group>"; };
 		CC645C071D9FBBB600E32EB1 /* sae_array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_array.c; path = core/sae_array.c; sourceTree = "<group>"; };
 		CC645C081D9FBBB600E32EB1 /* sae_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_array.h; path = core/sae_array.h; sourceTree = "<group>"; };
 		CC645C0D1D9FBBB600E32EB1 /* sae_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_config.h; path = core/sae_config.h; sourceTree = "<group>"; };
@@ -82,6 +87,10 @@
 		CCB0A1B61DE16AB1002582A8 /* sae_epoll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_epoll.c; path = event/modules/sae_epoll.c; sourceTree = "<group>"; };
 		CCC176701DE053310013E5D5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = core/config.h; sourceTree = "<group>"; };
 		CCC176711DE0585D0013E5D5 /* sae_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sae_main.c; sourceTree = "<group>"; };
+		CCCEE43F1DF2767500E33511 /* sae_http.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_http.c; path = http/sae_http.c; sourceTree = "<group>"; };
+		CCCEE4401DF2767500E33511 /* sae_http.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_http.h; path = http/sae_http.h; sourceTree = "<group>"; };
+		CCCEE4421DF2786500E33511 /* sae_http_request.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_http_request.c; path = http/sae_http_request.c; sourceTree = "<group>"; };
+		CCCEE4431DF2786500E33511 /* sae_http_request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_http_request.h; path = http/sae_http_request.h; sourceTree = "<group>"; };
 		CCD4C4851DA897C1000630A5 /* sae_connection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_connection.c; path = core/sae_connection.c; sourceTree = "<group>"; };
 		CCD4C4861DA897C1000630A5 /* sae_connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_connection.h; path = core/sae_connection.h; sourceTree = "<group>"; };
 		CCD4C4881DA8A3AA000630A5 /* sae_cycle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_cycle.c; path = core/sae_cycle.c; sourceTree = "<group>"; };
@@ -124,6 +133,12 @@
 		CC645C061D9FBBA600E32EB1 /* http */ = {
 			isa = PBXGroup;
 			children = (
+				CCCEE43F1DF2767500E33511 /* sae_http.c */,
+				CCCEE4401DF2767500E33511 /* sae_http.h */,
+				CCCEE4421DF2786500E33511 /* sae_http_request.c */,
+				CCCEE4431DF2786500E33511 /* sae_http_request.h */,
+				CC36481A1DF2A76300181174 /* sae_http_packet.c */,
+				CC36481B1DF2A76300181174 /* sae_http_packet.h */,
 			);
 			name = http;
 			sourceTree = "<group>";
@@ -285,11 +300,14 @@
 				CCD4C48A1DA8A3AA000630A5 /* sae_cycle.c in Sources */,
 				CC645C6C1D9FE1A700E32EB1 /* sae_log.c in Sources */,
 				CC645C871DA3788200E32EB1 /* sae_thread.c in Sources */,
+				CCCEE4441DF2786500E33511 /* sae_http_request.c in Sources */,
 				CC645C781DA223C200E32EB1 /* sae_list.c in Sources */,
 				CCD4C48D1DAA07B8000630A5 /* sae_socket.c in Sources */,
 				CCC176721DE0585D0013E5D5 /* sae_main.c in Sources */,
 				CC645C2F1D9FBBB600E32EB1 /* sae_array.c in Sources */,
+				CCCEE4411DF2767500E33511 /* sae_http.c in Sources */,
 				CC6B7F471DEAA19300B6CE13 /* sae_utils.c in Sources */,
+				CC36481C1DF2A76300181174 /* sae_http_packet.c in Sources */,
 				CCD4C4871DA897C1000630A5 /* sae_connection.c in Sources */,
 				CC645C7B1DA22CAD00E32EB1 /* sae_table.c in Sources */,
 				CC645C921DA3CD9300E32EB1 /* sae_parse.c in Sources */,

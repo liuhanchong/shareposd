@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_log.h"
 
 sae_list_t *sae_list_create()
 {

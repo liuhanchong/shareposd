@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_log.h"
 
 /*create log file*/
 static sae_file_t *sae_log_file(sae_log_t *log, sae_log_type_t type)

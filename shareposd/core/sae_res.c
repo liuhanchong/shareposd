@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_res.h"
 
 sae_bool_t sae_res_fd_max_set(sae_uint64_t n)
 {

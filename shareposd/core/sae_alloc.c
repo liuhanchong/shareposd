@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_alloc.h"
 
 sae_void_t *sae_alloc(sae_size_t size)
 {

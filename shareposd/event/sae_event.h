@@ -35,7 +35,7 @@ typedef struct sae_event_s sae_event_t;
 typedef struct sae_event_base_s sae_event_base_t;
 typedef struct sae_event_top_s sae_event_top_t;
 typedef sae_int_t sae_event_fd_t;
-typedef sae_void_t *(*sae_event_call_back)(sae_void_t *, sae_void_t *);
+typedef sae_void_t *(*sae_event_call_back)(sae_event_t *, sae_void_t *);
 typedef sae_bool_t (*sae_event_base_handle_call_back)(sae_event_t *event);
 
 struct sae_event_s

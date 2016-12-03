@@ -22,7 +22,7 @@ sae_int_t main(sae_int_t argc, sae_char_t **argv)
         return EXIT_FAILURE;
     }
     
-    sae_log(LDEBUG, "create deamon process success");
+    sae_log(LDEBUG, "create deamon process success, the demon pid is %d", sae_res_pid_get());
     
     sae_event_top_array_t *array = sae_event_top_create();
     if (!array)
@@ -31,7 +31,11 @@ sae_int_t main(sae_int_t argc, sae_char_t **argv)
         return EXIT_FAILURE;
     }
     
-    sae_log(LDEBUG, "the demon pid is %d", sae_res_pid_get());
+    if (array->nelts < 1)
+    {
+        sae_log(LDEBUG, "event top num is %d, sys must have one event top", array->nelts);
+        return EXIT_FAILURE;
+    }
     
     sae_log(LDEBUG, "event top num is %d", array->nelts);
     

@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_socket.h"
 
 sae_socket_fd_t sae_socket(sae_int_t domain, sae_int_t type,
                                    sae_int_t protocol, sae_int_t flag)
@@ -179,4 +178,13 @@ sae_bool_t sae_socket_pair(sae_socket_fd_t *sock_pair)
 #else
     return (socketpair(AF_UNIX, SOCK_STREAM, 0, sock_pair) == -1) ? sae_false : sae_true;
 #endif
+}
+
+sae_char_t *sae_socket_addr(struct sockaddr_in *sock_addr, socklen_t sock_len)
+{
+    static sae_char_t buf[25];
+    
+    sprintf(buf, "%s:%d", inet_ntoa(sock_addr->sin_addr), ntohs(sock_addr->sin_port));
+    
+    return buf;
 }

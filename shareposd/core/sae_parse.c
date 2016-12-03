@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_parse.h"
 
 static sae_bool_t sae_parse_section_find(sae_char_t *line, sae_parse_char_t *section)
 {

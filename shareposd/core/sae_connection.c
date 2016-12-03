@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_connection.h"
 
 sae_connection_listening_t *sae_listening_inet_stream_socket(sae_cycle_core_t *cycle,
                                                              sae_in_addr_t addr, sae_in_port_t port)

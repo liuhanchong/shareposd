@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_file.h"
 
 /*get file open way*/
 static sae_int_t sae_file_get_sys_open_way(sae_int_t op)

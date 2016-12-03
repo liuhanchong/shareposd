@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_heap.h"
 
 static sae_heap_elt_t *sae_heap_elt_get(sae_heap_t *heap, sae_uint_t index)
 {

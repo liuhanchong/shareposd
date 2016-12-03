@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_thread.h"
 
 #if !(HAVE_WIN32)
 static sae_void_t sae_thread_call_clean_mutex_linux(sae_void_t *mutex)

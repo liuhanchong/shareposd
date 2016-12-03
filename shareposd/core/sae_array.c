@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_array.h"
 
 sae_array_t *sae_array_create(sae_uint_t n, sae_size_t size)
 {

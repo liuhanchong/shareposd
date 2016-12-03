@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_table.h"
 
 static sae_bool_t sae_table_key_equal(sae_cchar_t *dkey, sae_cchar_t *skey)
 {

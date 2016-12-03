@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_string.h"
 
 sae_ulong_t sae_str_hash(sae_char_t *str)
 {

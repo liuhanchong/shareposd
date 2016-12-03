@@ -33,4 +33,7 @@ sae_bool_t sae_socket_close(sae_socket_fd_t fd);
 
 sae_bool_t sae_socket_pair(sae_socket_fd_t *sock_pair);
 
+/*note: the fun is single thread*/
+sae_char_t *sae_socket_addr(struct sockaddr_in *sock_addr, socklen_t sock_len);
+
 #endif /* _SAE_SOCKET_H_INCLUDED_ */

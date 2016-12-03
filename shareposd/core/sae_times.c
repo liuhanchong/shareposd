@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_times.h"
 
 sae_short_t sae_times_timeval_cmp(struct timeval *src, struct timeval *dest)
 {

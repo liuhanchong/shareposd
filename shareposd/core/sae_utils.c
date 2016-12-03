@@ -4,8 +4,7 @@
  */
 
 
-#include "sae_config.h"
-#include "sae_core.h"
+#include "sae_utils.h"
 
 sae_bool_t sae_utils_process_deamon()
 {

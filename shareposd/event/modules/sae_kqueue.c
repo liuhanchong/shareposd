@@ -129,19 +129,12 @@ sae_bool_t sae_kqueue_add(sae_event_t *event, sae_void_t *arg)
     {
         return sae_false;
     }
-
-    event->event_state = SAE_EVENT_STATE_INSERT;
     
     return sae_true;
 }
 
 sae_bool_t sae_kqueue_del(sae_event_t *event, sae_void_t *arg)
 {
-    if (!(event->event_state & SAE_EVENT_STATE_INSERT))
-    {
-        return sae_false;
-    }
-    
     struct kevent kev;
     sae_int_t flags = 0;
     sae_int_t filter = 0;
@@ -169,8 +162,6 @@ sae_bool_t sae_kqueue_del(sae_event_t *event, sae_void_t *arg)
     {
         return sae_false;
     }
-    
-    event->event_state |= SAE_EVENT_STATE_DELETE;
     
     return sae_true;
 }
@@ -224,20 +215,14 @@ sae_bool_t sae_kqueue_dispatch(sae_event_base_t *base, struct timeval *tv, sae_v
             continue;
         }
         
-        /*not PERSIST and not delete*/
-        if (!(event->event_flag & SAE_EVENT_PERSIST) &&
-            !(event->event_state & SAE_EVENT_STATE_DELETE))
+        /*not PERSIST*/
+        if (!(event->event_flag & SAE_EVENT_PERSIST))
         {
             sae_event_del(event);
         }
         
         /*not active*/
-        if (!(event->event_state & SAE_EVENT_STATE_ACTIVE))
-        {
-            event->event_state |= SAE_EVENT_STATE_ACTIVE;
-            
-            sae_event_active(event);
-        }
+        sae_event_active(event);
     }
     
     return sae_true;
