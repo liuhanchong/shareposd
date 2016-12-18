@@ -15,10 +15,10 @@ sae_socket_fd_t sae_socket(sae_int_t domain,
 
 sae_bool_t sae_socket_nonblock(sae_socket_fd_t fd);
 
-sae_size_t sae_socket_recv(sae_socket_fd_t fd, sae_void_t *buf,
+sae_ssize_t sae_socket_recv(sae_socket_fd_t fd, sae_void_t *buf,
                            sae_size_t size, sae_int_t flag);
 
-sae_size_t sae_socket_send(sae_socket_fd_t fd, sae_void_t *buf,
+sae_ssize_t sae_socket_send(sae_socket_fd_t fd, sae_void_t *buf,
                            sae_size_t size, sae_int_t flag);
 
 sae_bool_t sae_socket_bind(sae_socket_fd_t fd, struct sockaddr *sock_addr, socklen_t sock_len);

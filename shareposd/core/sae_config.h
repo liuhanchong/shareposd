@@ -53,6 +53,7 @@ typedef int32_t sae_int32_t;
 /*sys define type*/
 typedef size_t sae_size_t;
 typedef off_t sae_off_t;
+typedef ssize_t sae_ssize_t;
 
 /*array*/
 typedef struct sae_array_s sae_array_t;
@@ -191,5 +192,11 @@ typedef pid_t sae_pid_t;
 #else
 typedef pid_t sae_pid_t;
 #endif
+
+/*buffer*/
+typedef struct sae_buffer_s sae_buffer_t;
+#define SAE_BUFFER_MAX_LEN 65536
+#define SAE_BUFFER_INIT_LEN 1024
+#define SAE_BUFFER_LINE_FLAG "\r\n"
 
 #endif /* _SAE_CONFIG_H_INCLUDED_ */

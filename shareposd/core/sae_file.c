@@ -141,24 +141,24 @@ sae_bool_t sae_file_fd_close(sae_file_fd_t fd)
 #endif
 }
 
-sae_size_t sae_file_read(sae_file_fd_t fd, sae_char_t *text, sae_size_t len)
+sae_ssize_t sae_file_read(sae_file_fd_t fd, sae_char_t *text, sae_size_t len)
 {
 #if (HAVE_WIN32)
     DWORD read_len = 0;
     ReadFile(fd, text, len, &read_len, sae_null);
 #else
-    sae_size_t read_len = 0;
+    sae_ssize_t read_len = 0;
     read_len = read(fd, text, len);
 #endif
 
     return read_len;
 }
 
-sae_size_t sae_file_read_line(sae_file_fd_t fd, sae_char_t *text, sae_size_t len)
+sae_ssize_t sae_file_read_line(sae_file_fd_t fd, sae_char_t *text, sae_size_t len)
 {
     sae_char_t *find = sae_null;
-    sae_size_t read_len = 0;
-    sae_size_t line_len = 0;
+    sae_ssize_t read_len = 0;
+    sae_ssize_t line_len = 0;
     
     /*clear mem*/
     sae_memzero(text, len);
@@ -194,13 +194,13 @@ sae_size_t sae_file_read_line(sae_file_fd_t fd, sae_char_t *text, sae_size_t len
     return line_len;
 }
 
-sae_size_t sae_file_write(sae_file_fd_t fd, sae_cchar_t *text, sae_size_t len)
+sae_ssize_t sae_file_write(sae_file_fd_t fd, sae_cchar_t *text, sae_size_t len)
 {
 #if (HAVE_WIN32)
     DWORD write_len = 0;
     WriteFile(fd, text, len, &write_len, sae_null);
 #else
-    sae_size_t write_len = 0;
+    sae_ssize_t write_len = 0;
     write_len = write(fd, text, len);
 #endif
 

@@ -14,6 +14,8 @@ sae_void_t *sae_alloc(sae_size_t size);
 
 sae_void_t *sae_alloc_n(sae_size_t size, sae_uint_t nalloc);
 
+sae_void_t *sae_realloc(sae_void_t *addr, sae_size_t size);
+
 sae_void_t  sae_alloc_free(sae_void_t *alloc);
 
 #endif /* _SAE_ALLOC_H_INCLUDED_ */

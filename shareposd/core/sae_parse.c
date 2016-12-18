@@ -80,7 +80,7 @@ sae_parse_t *sae_parse_create(sae_cchar_t *path)
 sae_bool_t sae_parse_string(sae_parse_t *parse, sae_parse_char_t *section,
                             sae_parse_char_t *key, sae_char_t *value, sae_size_t size)
 {
-    sae_size_t read_len = 0;
+    sae_ssize_t read_len = 0;
     sae_char_t line[SAE_PARSE_ROW_MAX_LEN];
     sae_bool_t find_section = sae_false;
     sae_char_t *find = sae_null;

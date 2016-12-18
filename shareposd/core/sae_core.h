@@ -23,5 +23,6 @@
 #include "sae_times.h"
 #include "sae_res.h"
 #include "sae_utils.h"
+#include "sae_buffer.h"
 
 #endif /* _SAE_CORE_H_INCLUDED_ */

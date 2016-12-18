@@ -43,7 +43,7 @@ sae_bool_t sae_socket_nonblock(sae_socket_fd_t fd)
 #endif
 }
 
-sae_size_t sae_socket_recv(sae_socket_fd_t fd, sae_void_t *buf,
+sae_ssize_t sae_socket_recv(sae_socket_fd_t fd, sae_void_t *buf,
                            sae_size_t size, sae_int_t flag)
 {
 #if (HAVE_WIN32)
@@ -54,7 +54,7 @@ sae_size_t sae_socket_recv(sae_socket_fd_t fd, sae_void_t *buf,
 #endif
 }
 
-sae_size_t sae_socket_send(sae_socket_fd_t fd, sae_void_t *buf,
+sae_ssize_t sae_socket_send(sae_socket_fd_t fd, sae_void_t *buf,
                            sae_size_t size, sae_int_t flag)
 {
 #if (HAVE_WIN32)

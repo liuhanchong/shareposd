@@ -109,3 +109,8 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     
     return packet;
 }
+
+sae_void_t *sae_http_request_write(sae_event_t *event, sae_void_t *arg)
+{
+    return sae_null;
+}

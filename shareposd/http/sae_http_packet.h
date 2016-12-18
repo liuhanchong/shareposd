@@ -18,6 +18,7 @@ struct sae_http_packet_s
     sae_socket_fd_t http_client_fd;
     sae_http_packet_table_t *packet_table;
     sae_char_t *http_client_fd_str;
+    sae_buffer_t *http_client_buffer;
 };
 
 struct sae_http_packet_table_s
