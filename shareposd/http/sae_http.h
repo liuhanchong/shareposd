@@ -16,7 +16,7 @@ typedef struct sae_http_s sae_http_t;
 struct sae_http_s
 {
     sae_socket_fd_t http_server_fd;
-    sae_http_packet_table_t *packet_table;
+    sae_http_packet_table_t *requset_packet_table;
 };
 
 sae_http_t *sae_http_create(sae_cycle_conf_t *cycle);

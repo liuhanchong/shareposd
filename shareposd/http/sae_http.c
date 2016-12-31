@@ -9,7 +9,6 @@
 static sae_bool_t sae_http_handle(sae_event_t *event)
 {
     sae_void_t *ret = sae_null;
-    sae_http_packet_t *packet = sae_null;
     
     if (!(event->event_state & SAE_EVENT_STATE_ACTIVE))
     {
@@ -17,12 +16,6 @@ static sae_bool_t sae_http_handle(sae_event_t *event)
     }
     
     ret = event->event_call(event, event->event_call_arg);
-    
-    /*read data need process*/
-    if ((event->event_flag & SAE_EVENT_READ) && ret)
-    {
-        packet = ret;
-    }
     
     //no persist event del
     if (!(event->event_flag & SAE_EVENT_PERSIST))

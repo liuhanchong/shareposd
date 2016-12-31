@@ -177,3 +177,36 @@ sae_bool_t sae_buffer_add(sae_buffer_t *buffer, sae_char_t *buf, sae_size_t len)
     
     return sae_true;
 }
+
+sae_bool_t sae_buffer_add_printf(sae_buffer_t *buffer, sae_char_t *format, ...)
+{
+    va_list arg_list;
+    sae_char_t str[SAE_BUFFER_MAX_LEN];
+    sae_size_t len = 0;
+    va_start(arg_list, format);
+    len = sae_vsnprintf(str, SAE_BUFFER_MAX_LEN, format, arg_list);
+    va_end(arg_list);
+    
+    return sae_buffer_add(buffer, str, len);
+}
+
+sae_buffer_t *sae_buffer_copy(sae_buffer_t *buffer)
+{
+    sae_buffer_t *copy_buffer = sae_alloc(sae_sizeof(sae_buffer_t));
+    if (!copy_buffer)
+    {
+        return copy_buffer;
+    }
+    
+    sae_memcpy(copy_buffer, buffer, sae_sizeof(sae_buffer_t));
+    
+    if (!(copy_buffer->buffer = sae_alloc(copy_buffer->buffer_len)))
+    {
+        sae_alloc_free(copy_buffer);
+        return sae_null;
+    }
+    
+    sae_memcpy(copy_buffer->buffer, buffer->buffer, copy_buffer->buffer_off);
+    
+    return copy_buffer;
+}

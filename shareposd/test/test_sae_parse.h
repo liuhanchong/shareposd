@@ -12,12 +12,12 @@
 sae_int_t main_parse(sae_int_t argc, sae_char_t **argv)
 {
     int i = 0;
-    sae_parse_t *parse = NULL;
+    sae_parse_t *parse = sae_null;
     sae_char_t value[SAE_PARSE_ROW_MAX_LEN];
     
     sae_parse_char_t *section[10] = {"COMMUNICATION", "COMMUNICATION", "COMMUNICATION",
-        "刘撼翀", "刘撼翀", "COMMUNICATION", "LOG", "刘撼翀", "COMMUNICATION", NULL};
-    sae_parse_char_t *key[10] = {"123", "S_1", "12", "钱", "性a别", "钱", "TEST", "钱", "钱1", NULL};
+        "刘撼翀", "刘撼翀", "COMMUNICATION", "LOG", "刘撼翀", "COMMUNICATION", sae_null};
+    sae_parse_char_t *key[10] = {"123", "S_1", "12", "钱", "性a别", "钱", "TEST", "钱", "钱1", sae_null};
     
     parse = sae_parse_create("/Users/liuhanchong/Desktop/server.ini");
     if (!parse)

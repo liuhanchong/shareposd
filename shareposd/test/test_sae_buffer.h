@@ -63,6 +63,10 @@ sae_int_t main_buffer(sae_int_t argc, sae_char_t **argv)
             line = sae_buffer_read_line(buffer);
         }
         
+        sae_buffer_add_printf(buffer, "\n-----------------%s %d %c\n", "123", 456, 'c');
+        
+        printf("\n----------------%s", sae_buffer_get(sae_buffer_copy(buffer)));
+        
         sae_buffer_destroy(buffer);
         printf("---------------------\nok\n");
     }

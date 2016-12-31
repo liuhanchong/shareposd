@@ -15,10 +15,10 @@ typedef struct sae_http_packet_table_s sae_http_packet_table_t;
 
 struct sae_http_packet_s
 {
-    sae_socket_fd_t http_client_fd;
+    sae_socket_fd_t http_fd;
     sae_http_packet_table_t *packet_table;
-    sae_char_t *http_client_fd_str;
-    sae_buffer_t *http_client_buffer;
+    sae_char_t *http_fd_str;
+    sae_buffer_t *http_buffer;
 };
 
 struct sae_http_packet_table_s

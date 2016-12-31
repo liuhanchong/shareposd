@@ -45,9 +45,9 @@ sae_int_t sae_strncmp_parse(sae_cchar_t *s1, sae_parse_char_t *s2, sae_size_t n)
 #endif
 
 #if (HAVE_WIN32)
-#define sae_vsnprintf(str, len, format, arg_list) vsnprintf_s(info, SAE_LOG_SIZE, _TRUNCATE, format, arg_list)
+#define sae_vsnprintf(str, len, format, arg_list) vsnprintf_s(str, len, _TRUNCATE, format, arg_list)
 #else
-#define sae_vsnprintf(str, len, format, arg_list) vsnprintf(info, SAE_LOG_SIZE, format, arg_list)
+#define sae_vsnprintf(str, len, format, arg_list) vsnprintf(str, len, format, arg_list)
 #endif
 
 sae_ulong_t sae_str_hash(sae_char_t *str);
