@@ -46,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CC28AECB1E175FA900B0C1D0 /* test_sae_buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = test_sae_buffer.h; path = test/test_sae_buffer.h; sourceTree = "<group>"; };
 		CC36481A1DF2A76300181174 /* sae_http_packet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_http_packet.c; path = http/sae_http_packet.c; sourceTree = "<group>"; };
 		CC36481B1DF2A76300181174 /* sae_http_packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_http_packet.h; path = http/sae_http_packet.h; sourceTree = "<group>"; };
 		CC36481D1DF2BAF800181174 /* sae_buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_buffer.c; path = core/sae_buffer.c; sourceTree = "<group>"; };
@@ -157,6 +158,7 @@
 				CC645C8E1DA3B7D200E32EB1 /* test_sae_log.h */,
 				CC645C8F1DA3B7D200E32EB1 /* test_sae_thread.h */,
 				CC645C931DA63A2500E32EB1 /* test_sae_parse.h */,
+				CC28AECB1E175FA900B0C1D0 /* test_sae_buffer.h */,
 			);
 			name = test;
 			sourceTree = "<group>";

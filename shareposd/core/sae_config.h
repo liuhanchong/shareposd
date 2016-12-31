@@ -197,6 +197,6 @@ typedef pid_t sae_pid_t;
 typedef struct sae_buffer_s sae_buffer_t;
 #define SAE_BUFFER_MAX_LEN 65536
 #define SAE_BUFFER_INIT_LEN 1024
-#define SAE_BUFFER_LINE_FLAG "\r\n"
+#define SAE_BUFFER_LINE_FLAG "\n"
 
 #endif /* _SAE_CONFIG_H_INCLUDED_ */

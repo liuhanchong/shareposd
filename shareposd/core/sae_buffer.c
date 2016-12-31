@@ -24,8 +24,6 @@ static sae_bool_t sae_buffer_realloc(sae_buffer_t *buffer, sae_size_t add_len)
         return sae_false;
     }
     
-    sae_alloc_free(buffer->buffer);
-    
     buffer->buffer = buffer_new;
     
     return sae_true;
@@ -121,26 +119,38 @@ sae_bool_t sae_buffer_read_file(sae_buffer_t *buffer, sae_file_fd_t fd)
 
 sae_char_t *sae_buffer_read_line(sae_buffer_t *buffer)
 {
-    /*read line to head reset*/
-    buffer->buffer_off_line = (buffer->buffer_off_line >= buffer->buffer_off) ? 0 : buffer->buffer_off_line;
+    /*read line to last reset*/
+    if (buffer->buffer_off_line >= buffer->buffer_off)
+    {
+        buffer->buffer_off_line = 0;
+        return sae_null;
+    }
     
+    sae_size_t buffer_off_line_old = buffer->buffer_off_line;
     sae_size_t len = buffer->buffer_off - buffer->buffer_off_line;
-    sae_char_t *buf = sae_alloc(len);
+    sae_char_t *buf = sae_alloc(len + 1);
+    if (!buf)
+    {
+        return buf;
+    }
     
-//    while (len > 0)
-//    {
-//        if (sae_strchr(SAE_BUFFER_LINE_FLAG, buffer->buffer[buffer->buffer_off_line]))
-//        {
-//            break;
-//        }
-//        
-//        len--;
-//        buffer->buffer_off_line++;
-//    }
-//    
-//    sae_memcpy(buf, buffer->buffer, buffer->buffer_off - buffer->buffer_off_line - len);
+    while (buffer->buffer_off_line < buffer->buffer_off)
+    {
+        if (sae_strchr(SAE_BUFFER_LINE_FLAG, buffer->buffer[buffer->buffer_off_line++]))
+        {
+            break;
+        }
+    }
+
+    sae_memcpy(buf, buffer->buffer + buffer_off_line_old, buffer->buffer_off_line - buffer_off_line_old);
+    buf[buffer->buffer_off_line - buffer_off_line_old - 1] = sae_str_end;
     
     return buf;
+}
+
+sae_void_t sae_buffer_read_line_free(sae_char_t *line)
+{
+    sae_alloc_free(line);
 }
 
 sae_char_t *sae_buffer_get(sae_buffer_t *buffer)
@@ -162,6 +172,8 @@ sae_bool_t sae_buffer_add(sae_buffer_t *buffer, sae_char_t *buf, sae_size_t len)
     }
     
     sae_memcpy(buffer->buffer + buffer->buffer_off, buf, len);
+    
+    buffer->buffer_off += len;
     
     return sae_true;
 }

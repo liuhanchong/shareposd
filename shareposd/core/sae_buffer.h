@@ -29,6 +29,8 @@ sae_bool_t sae_buffer_read_file(sae_buffer_t *buffer, sae_file_fd_t fd);
 
 sae_char_t *sae_buffer_read_line(sae_buffer_t *buffer);
 
+sae_void_t sae_buffer_read_line_free(sae_char_t *line);
+
 sae_char_t *sae_buffer_get(sae_buffer_t *buffer);
 
 sae_bool_t sae_buffer_add(sae_buffer_t *buffer, sae_char_t *buf, sae_size_t len);
