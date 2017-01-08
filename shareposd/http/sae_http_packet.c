@@ -51,3 +51,27 @@ sae_bool_t sae_http_packet_del(sae_http_packet_t *packet)
 {
     return sae_table_del(packet->packet_table->packet, packet->http_fd_str);
 }
+
+sae_http_packet_table_t *sae_http_packet_table_create(sae_uint_t len)
+{
+    sae_http_packet_table_t *table = sae_alloc(sae_sizeof(sae_http_packet_table_t));
+    if (!table)
+    {
+        return table;
+    }
+    
+    table->packet = sae_table_create(len);
+    if (!table->packet)
+    {
+        sae_alloc_free(table);
+        return sae_null;
+    }
+    
+    return table;
+}
+
+sae_void_t sae_http_packet_table_destroy(sae_http_packet_table_t *table)
+{
+    sae_table_destroy(table->packet);
+    sae_alloc_free(table);
+}

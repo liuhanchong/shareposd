@@ -188,3 +188,30 @@ sae_char_t *sae_socket_addr(struct sockaddr_in *sock_addr, socklen_t sock_len)
     
     return buf;
 }
+
+sae_bool_t sae_socket_opt(sae_socket_fd_t fd, sae_int_t level, sae_int_t opt, sae_void_t *opt_val, socklen_t opt_len)
+{
+#if (HAVE_WIN32)
+    return (setsockopt(fd, level, opt, opt_val, opt_len) == 0) ? sae_true : sae_false;
+#else
+    return (setsockopt(fd, level, opt, opt_val, opt_len) == 0) ? sae_true : sae_false;
+#endif
+}
+
+sae_bool_t sae_socket_aton(const sae_char_t *ip, struct in_addr *addr)
+{
+#if (HAVE_WIN32)
+    return (inet_aton(ip, addr) == 0) ? sae_false : sae_true;
+#else
+    return (inet_aton(ip, addr) == 0) ? sae_false : sae_true;
+#endif
+}
+
+sae_uint16_t sae_socket_htons(sae_uint16_t port)
+{
+#if (HAVE_WIN32)
+    return htons(port);
+#else
+    return htons(port);
+#endif
+}

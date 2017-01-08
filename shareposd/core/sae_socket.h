@@ -36,4 +36,10 @@ sae_bool_t sae_socket_pair(sae_socket_fd_t *sock_pair);
 /*note: the fun is single thread*/
 sae_char_t *sae_socket_addr(struct sockaddr_in *sock_addr, socklen_t sock_len);
 
+sae_bool_t sae_socket_opt(sae_socket_fd_t fd, sae_int_t level, sae_int_t opt, sae_void_t *opt_val, socklen_t opt_len);
+
+sae_bool_t sae_socket_aton(const sae_char_t *ip, struct in_addr *addr);
+
+sae_uint16_t sae_socket_htons(sae_uint16_t port);
+
 #endif /* _SAE_SOCKET_H_INCLUDED_ */

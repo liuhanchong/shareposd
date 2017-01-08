@@ -6,18 +6,11 @@
 
 #include "sae_connection.h"
 
-sae_connection_listening_t *sae_listening_inet_stream_socket(sae_cycle_core_t *cycle,
-                                                             sae_in_addr_t addr, sae_in_port_t port)
+sae_connection_listening_t *sae_listening_socket_inet_stream(sae_connection_listening_t *listen,
+                                                             sae_in_addr_t addr, sae_in_port_t port, sae_bool_t nonblock)
 {
     sae_size_t len = 0;
-    sae_connection_listening_t *listen = sae_null;
     struct sockaddr_in *addr_in = sae_null;
-
-    listen = sae_array_push(cycle->listens);
-    if (!listen)
-    {
-        return listen;
-    }
     
     sae_memzero(listen, sae_sizeof(sae_connection_listening_t));
 
@@ -61,133 +54,83 @@ sae_connection_listening_t *sae_listening_inet_stream_socket(sae_cycle_core_t *c
     
     /*use*/
     listen->ignore = sae_false;
+    
+    listen->nonblock = nonblock;
 
     return listen;
 }
 
-sae_bool_t sae_open_listening_sockets(sae_cycle_core_t *cycle)
+sae_bool_t sae_listening_socket_open(sae_connection_listening_t *listen)
 {
-    sae_uint_t tries = 0;/*try number*/
-    sae_uint_t failed = 0;
-    sae_uint_t reuseaddr = 1;
-    sae_uint_t i = 0;
+    sae_uint_t reuse_addr = 1;
     sae_socket_fd_t s = (sae_socket_fd_t)-1;
-    sae_connection_listening_t  *listens = sae_null;
-
-    /* tries configurable */
-    for (tries = /* STUB */ 5; tries > 0; tries--)
+    
+    if (listen->ignore || listen->fd != -1)
     {
-        failed = 0;
-
-        /* for each listening socket */
-        listens = cycle->listens->elts;
-        for (i = 0; i < cycle->listens->nelts; i++)
-        {
-            if (listens[i].ignore ||
-                listens[i].fd != -1)
-            {
-                continue;
-            }
-
-            s = sae_socket(listens[i].family, listens[i].type, listens[i].protocol, listens[i].flags);
-            if (s == -1)
-            {
-                sae_log(LERROR, "sae_open_listening_sockets->sae_socket %s failed", listens[i].addr_text);
-                return sae_false;
-            }
-
-#if (HAVE_WIN32)
-            /*
-             * Winsock assignes a socket number divisible by 4
-             * so to find a connection we divide a socket number by 4
-             */
-            if (s % 4)
-            {
-                sae_log(LERROR, "created socket %d, because s % 4 != 0, Winsock assignes a socket number divisible by 4", s);
-                return sae_false;
-            }
-#endif
-            /*set reuse addr*/
-            if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const sae_void_t *)&reuseaddr, sizeof(sae_int_t)) == -1)
-            {
-                sae_log(LERROR, "setsockopt(SO_REUSEADDR) %s failed, sock %d", listens[i].addr_text, s);
-                sae_socket_close(s);
-                return sae_false;
-            }
-
-            if (!(cycle->event_flag & (0x01)))
-            {
-                if (!sae_socket_nonblock(s))
-                {
-                    sae_log(LERROR, "sae_open_listening_sockets->sae_nonblock %s failed", listens[i].addr_text);
-                    sae_socket_close(s);
-                    return sae_false;
-                }
-            }
-
-            if (bind(s, listens[i].sock_addr, listens[i].sock_len) == -1)
-            {
-                sae_log(LERROR, "bind() to %s failed", listens[i].addr_text);
-
-                if (!sae_socket_close(s))
-                {
-                    sae_log(LERROR, "sae_open_listening_sockets->sae_socket_close %s failed", listens[i].addr_text);
-                }
-
-                failed = 1;
-                
-                continue;
-            }
-
-            if (listen(s, listens[i].back_log) == -1)
-            {
-                sae_log(LERROR, "listen() to %s failed", listens[i].addr_text);
-                return sae_false;
-            }
-
-            /* TODO: deferred accept */
-            listens[i].fd = s;
-        }
-
-        if (!failed)
-        {
-            break;
-        }
-
-        /* TODO: delay configurable */
-        sae_log(LOTHER, "try again to bind() after 500ms");
-        sae_msleep(500);
+        return sae_true;
     }
-
-    if (failed)
+    
+    s = sae_socket(listen->family, listen->type, listen->protocol, listen->flags);
+    if (s == -1)
     {
-        sae_log(LERROR, "still can not bind()");
+        sae_log(LERROR, "sae_open_listening_sockets->sae_socket %s failed", listen->addr_text);
         return sae_false;
     }
+    
+#if (HAVE_WIN32)
+    /*
+     * Winsock assignes a socket number divisible by 4
+     * so to find a connection we divide a socket number by 4
+     */
+    if (s % 4)
+    {
+        sae_log(LERROR, "created socket %d, because s % 4 != 0, Winsock assignes a socket number divisible by 4", s);
+        return sae_false;
+    }
+#endif
+    /*set reuse addr*/
+    if (!sae_socket_opt(s, SOL_SOCKET, SO_REUSEADDR, (sae_void_t *)&reuse_addr, sizeof(sae_int_t)))
+    {
+        sae_log(LERROR, "setsockopt(SO_REUSEADDR) %s failed, sock %d", listen->addr_text, s);
+        sae_socket_close(s);
+        return sae_false;
+    }
+    
+    if (listen->nonblock)
+    {
+        if (!sae_socket_nonblock(s))
+        {
+            sae_log(LERROR, "sae_open_listening_sockets->sae_nonblock %s failed", listen->addr_text);
+            sae_socket_close(s);
+            return sae_false;
+        }
+    }
+    
+    if (!sae_socket_bind(s, listen->sock_addr, listen->sock_len))
+    {
+        sae_log(LERROR, "bind() to %s failed", listen->addr_text);
+        sae_socket_close(s);
+        return sae_false;
+    }
+    
+    if (!sae_socket_listen(s, listen->back_log))
+    {
+        sae_log(LERROR, "listen() to %s failed", listen->addr_text);
+        return sae_false;
+    }
+    
+    listen->fd = s;
 
     return sae_true;
 }
 
-sae_void_t sae_close_listening_sockets(sae_cycle_core_t *cycle)
+sae_void_t sae_listening_socket_close(sae_connection_listening_t *listen)
 {
-    sae_uint_t i = 0;
-    sae_connection_listening_t *listens = sae_null;
-
-    if (cycle->event_flag & (0x02))
+    if (!sae_socket_close(listen->fd))
     {
-        return;
+        sae_log(LERROR, " %s failed", listen->addr_text);
     }
-
-    listens = cycle->listens->elts;
-    for (i = 0; i < cycle->listens->nelts; i++)
-    {
-        /*todo event*/
-        if (sae_socket_close(listens[i].fd) == -1)
-        {
-            sae_log(LERROR, " %s failed", listens[i].addr_text);
-        }
-        
-        listens[i].fd = (sae_socket_fd_t)-1;
-    }
+    
+    listen->fd = (sae_socket_fd_t)-1;
 }
 

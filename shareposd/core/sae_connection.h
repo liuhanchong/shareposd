@@ -39,6 +39,7 @@ struct sae_connection_listening_s
     time_t post_accept_timeout;     /* should be here because
                                                   of the deferred accept */
     
+    sae_bool_t nonblock;/*non block socket*/
     sae_bool_t ignore; /*no use*/
 };
 
@@ -54,10 +55,10 @@ struct sae_connection_s
     sae_char_t *addr_text;
 };
 
-sae_connection_listening_t *sae_listening_inet_stream_socket(sae_cycle_core_t *cycle, sae_in_addr_t addr, sae_in_port_t port);
+sae_connection_listening_t *sae_listening_socket_inet_stream(sae_connection_listening_t *listen, sae_in_addr_t addr, sae_in_port_t port, sae_bool_t nonblock);
 
-sae_bool_t sae_open_listening_sockets(sae_cycle_core_t *cycle);
+sae_bool_t sae_listening_socket_open(sae_connection_listening_t *listen);
 
-sae_void_t sae_close_listening_sockets(sae_cycle_core_t *cycle);
+sae_void_t sae_listening_socket_close(sae_connection_listening_t *listen);
 
 #endif /* _SAE_CONNECTION_H_INCLUDED_ */

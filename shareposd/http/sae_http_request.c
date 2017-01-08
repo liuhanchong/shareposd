@@ -5,11 +5,10 @@
 
 
 #include "sae_http_request.h"
-#include "tp/klhttp-in.h"
 
-static struct http_request *sae_http_request_valid(sae_http_packet_t *packet)
+static http_request_t *sae_http_request_valid(sae_http_packet_t *packet)
 {
-    struct http_request *request = http_request_parse(packet->http_buffer);
+    http_request_t *request = http_request_parse(packet->http_buffer);
     if (!request)
     {
         return request;
@@ -30,17 +29,17 @@ static struct http_request *sae_http_request_valid(sae_http_packet_t *packet)
     return sae_null;
 }
 
-static sae_http_packet_t *sae_http_request_packet_get(sae_http_t *http_server, sae_event_t *event)
+static sae_http_packet_t *sae_http_request_packet_get(sae_http_server_t *http_server, sae_event_t *event)
 {
     sae_http_packet_t *packet = sae_null;
     
-    if ((packet = sae_table_value(http_server->requset_packet_table->packet, event->event_fd_str)))
+    if ((packet = sae_table_value(http_server->http_requset_packet_table->packet, event->event_fd_str)))
     {
         return packet;
     }
     
     /*add new packet*/
-    if (!(packet = sae_http_packet_create(event->event_fd, http_server->requset_packet_table)))
+    if (!(packet = sae_http_packet_create(event->event_fd, http_server->http_requset_packet_table)))
     {
         sae_log(LERROR, "sae_http_read create new packet failed, the client fd is %d", event->event_fd);
         return sae_null;
@@ -55,7 +54,7 @@ static sae_http_packet_t *sae_http_request_packet_get(sae_http_t *http_server, s
     return packet;
 }
 
-static sae_bool_t sae_http_request_parse(sae_http_packet_t *request_packet, sae_buffer_t *response_buffer, struct http_request *request)
+static sae_bool_t sae_http_request_parse(sae_http_packet_t *request_packet, sae_buffer_t *response_buffer, http_request_t *request)
 {
     if(check_request_valid(response_buffer, request) != 0)
     {
@@ -72,7 +71,7 @@ static sae_bool_t sae_http_request_parse(sae_http_packet_t *request_packet, sae_
     return sae_true;
 }
 
-static sae_void_t sae_http_response_head_add(sae_buffer_t *response_buffer, const struct http_request *request, sae_char_t *type)
+static sae_void_t sae_http_response_head_add(sae_buffer_t *response_buffer, const http_request_t *request, sae_char_t *type)
 {
     /* http version info */
     sae_buffer_add_printf(response_buffer, "HTTP/%d.%d %d %s\r\n", request->ver.major,
@@ -118,22 +117,27 @@ static sae_bool_t sae_http_response(sae_event_base_t *base, sae_socket_fd_t fd, 
     return sae_true;
 }
 
+static sae_bool_t sae_http_request_handle(sae_buffer_t *result_buffer, http_request_t *request)
+{
+    return sae_true;
+}
+
 sae_void_t *sae_http_request_accept(sae_event_t *event, sae_void_t *arg)
 {
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sae_sizeof(client_addr);
-    sae_http_t *http_server = arg;
+    sae_http_server_t *http_server = arg;
     sae_event_t *http_client_event = sae_null;
     sae_socket_fd_t http_client_fd = -1;
     
-    if (http_server->http_server_fd != event->event_fd)
+    if (http_server->http_listen->fd != event->event_fd)
     {
         return sae_null;
     }
 
-    if ((http_client_fd = sae_socket_accept(http_server->http_server_fd, (struct sockaddr *)&client_addr, client_addr_len)) < 0)
+    if ((http_client_fd = sae_socket_accept(http_server->http_listen->fd, (struct sockaddr *)&client_addr, client_addr_len)) < 0)
     {
-        sae_log(LERROR, "sae_http_accept->sae_socket_accept failed, server fd is %d", http_server->http_server_fd);
+        sae_log(LERROR, "sae_http_accept->sae_socket_accept failed, server fd is %d", http_server->http_listen->fd);
         return sae_null;
     }
     
@@ -160,11 +164,16 @@ sae_void_t *sae_http_request_accept(sae_event_t *event, sae_void_t *arg)
 
 sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
 {
-    sae_http_t *http_server = arg;
-    struct http_request *request = sae_null;
+    sae_http_server_t *http_server = arg;
+    http_request_t *request = sae_null;
     sae_http_packet_t *request_packet = sae_null;
     sae_buffer_t *response_buffer = sae_null;
-    sae_buffer_t *result_buffer = sae_null;
+    sae_buffer_t *result_buffer = sae_buffer_create();
+    if (!result_buffer)
+    {
+        sae_log(LERROR, "sae_http_request_read sae_buffer_create failed, the client fd is %d", event->event_fd);
+        return sae_null;
+    }
     
     /*get packet*/
     if (!(request_packet = sae_http_request_packet_get(http_server, event)))
@@ -175,7 +184,7 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     /*read data*/
     if (!sae_http_packet_read(request_packet))
     {
-        sae_log(LERROR, "sae_http_read read packet data failed, the client fd is %d", event->event_fd);
+        sae_log(LERROR, "sae_http_request_read read packet data failed, the client fd is %d", event->event_fd);
         return sae_null;
     }
     
@@ -189,7 +198,7 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     if (!response_buffer)
     {
         http_request_free(request);
-        sae_log(LERROR, "sae_http_read sae_buffer_create failed, the client fd is %d", event->event_fd);
+        sae_log(LERROR, "sae_http_request_read sae_buffer_create failed, the client fd is %d", event->event_fd);
         return response_buffer;
     }
     
@@ -198,33 +207,28 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     {
         http_request_free(request);
         sae_buffer_destroy(response_buffer);
-        sae_log(LERROR, "sae_http_read del packet failed, the client fd is %d", event->event_fd);
+        sae_log(LERROR, "sae_http_request_read del packet failed, the client fd is %d", event->event_fd);
         return sae_null;
     }
     
-    if (!sae_http_request_parse(request_packet, response_buffer, request))
+    if (sae_http_request_parse(request_packet, response_buffer, request))
     {
-        http_request_free(request);
-        sae_http_packet_destroy(request_packet);
-        sae_buffer_destroy(response_buffer);
-        sae_log(LERROR, "sae_http_read parse packet failed, the client fd is %d", event->event_fd);
-        return sae_null;
+        sae_http_request_handle(result_buffer, request);
+    }
+    else
+    {
+        sae_char_t *error = "{\"error\":\"json context parse error\"}";
+        sae_buffer_add(result_buffer, error, strlen(error));
+        sae_log(LERROR, "sae_http_request_read parse packet failed, the client fd is %d", event->event_fd);
     }
     
-    /*into logic*/
-    result_buffer = sae_null;
-    if (!result_buffer)
-    {
-        sae_log(LERROR, "sae_http_read logic process failed, the client fd is %d", event->event_fd);
-    }
-
     sae_http_response_head_add(response_buffer, request, "application/json");
 
     sae_http_response_body_add(response_buffer, result_buffer);
     
     if (!sae_http_response(event->event_base, event->event_fd, response_buffer))
     {
-        sae_log(LERROR, "sae_http_read sae_http_request_write failed, the client fd is %d", event->event_fd);
+        sae_log(LERROR, "sae_http_request_read sae_http_request_write failed, the client fd is %d", event->event_fd);
     }
     
     http_request_free(request);
@@ -232,29 +236,28 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     sae_http_packet_destroy(request_packet);
     sae_buffer_destroy(response_buffer);
     
+    sae_event_free(event);
+    
     return sae_null;
 }
 
 sae_void_t *sae_http_request_write(sae_event_t *event, sae_void_t *arg)
 {
+    sae_ssize_t len = 0;
     sae_buffer_t *buffer = arg;
     
-    sae_ssize_t len = sae_socket_send(event->event_fd, buffer->buffer, buffer->buffer_off, 0);
+    len = sae_socket_send(event->event_fd, buffer->buffer, buffer->buffer_off, 0);
     if (len <= 0)
     {
-        sae_buffer_destroy(buffer);
-        
-        if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
+        if (errno != EINTR && errno != EWOULDBLOCK && errno != EAGAIN)
         {
-            return sae_null;
+            sae_log(LERROR, "sae_http_request_write sae_socket_send failed");
         }
-        
-        sae_socket_close(event->event_fd);
-        sae_log(LERROR, "sae_http_request_write sae_socket_send failed");
-        return sae_null;
     }
     
     sae_buffer_destroy(buffer);
+    sae_socket_close(event->event_fd);
+    sae_event_free(event);
     
     return sae_null;
 }

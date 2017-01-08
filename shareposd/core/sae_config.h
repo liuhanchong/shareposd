@@ -49,6 +49,7 @@ typedef float sae_float_t;
 typedef uint32_t sae_uint32_t;
 typedef uint64_t sae_uint64_t;
 typedef int32_t sae_int32_t;
+typedef uint16_t sae_uint16_t;
 
 /*sys define type*/
 typedef size_t sae_size_t;
@@ -152,6 +153,7 @@ typedef sae_char_t sae_parse_char_t;
 typedef SOCKET sae_socket_fd_t;
 typedef ULONG sae_in_addr_t;
 typedef u_short sae_in_port_t;
+typedef struct in_addr sae_sin_addr_t;
 #else
 #include <netdb.h>
 #include <sys/socket.h>
@@ -162,6 +164,7 @@ typedef u_short sae_in_port_t;
 typedef in_addr_t sae_in_addr_t;
 typedef in_port_t sae_in_port_t;
 typedef sae_int_t sae_socket_fd_t;
+typedef struct in_addr sae_sin_addr_t;
 #endif
 typedef struct sae_connection_listening_s sae_connection_listening_t;
 typedef struct sae_connection_s sae_connection_t;

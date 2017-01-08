@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CC28AED41E17811F00B0C1D0 /* cjson.c in Sources */ = {isa = PBXBuildFile; fileRef = CC28AECD1E17811F00B0C1D0 /* cjson.c */; };
 		CC28AED61E17811F00B0C1D0 /* klhttp-in.c in Sources */ = {isa = PBXBuildFile; fileRef = CC28AED11E17811F00B0C1D0 /* klhttp-in.c */; };
 		CC36481C1DF2A76300181174 /* sae_http_packet.c in Sources */ = {isa = PBXBuildFile; fileRef = CC36481A1DF2A76300181174 /* sae_http_packet.c */; };
 		CC36481F1DF2BAF800181174 /* sae_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = CC36481D1DF2BAF800181174 /* sae_buffer.c */; };
@@ -49,8 +48,6 @@
 
 /* Begin PBXFileReference section */
 		CC28AECB1E175FA900B0C1D0 /* test_sae_buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = test_sae_buffer.h; path = test/test_sae_buffer.h; sourceTree = "<group>"; };
-		CC28AECD1E17811F00B0C1D0 /* cjson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cjson.c; path = http/tp/cjson.c; sourceTree = "<group>"; };
-		CC28AECE1E17811F00B0C1D0 /* cjson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cjson.h; path = http/tp/cjson.h; sourceTree = "<group>"; };
 		CC28AED11E17811F00B0C1D0 /* klhttp-in.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "klhttp-in.c"; path = "http/tp/klhttp-in.c"; sourceTree = "<group>"; };
 		CC28AED21E17811F00B0C1D0 /* klhttp-in.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "klhttp-in.h"; path = "http/tp/klhttp-in.h"; sourceTree = "<group>"; };
 		CC36481A1DF2A76300181174 /* sae_http_packet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_http_packet.c; path = http/sae_http_packet.c; sourceTree = "<group>"; };
@@ -126,8 +123,6 @@
 		CC28AECC1E1780B000B0C1D0 /* tp */ = {
 			isa = PBXGroup;
 			children = (
-				CC28AECD1E17811F00B0C1D0 /* cjson.c */,
-				CC28AECE1E17811F00B0C1D0 /* cjson.h */,
 				CC28AED11E17811F00B0C1D0 /* klhttp-in.c */,
 				CC28AED21E17811F00B0C1D0 /* klhttp-in.h */,
 			);
@@ -334,7 +329,6 @@
 				CC28AED61E17811F00B0C1D0 /* klhttp-in.c in Sources */,
 				CC6B7F471DEAA19300B6CE13 /* sae_utils.c in Sources */,
 				CC36481C1DF2A76300181174 /* sae_http_packet.c in Sources */,
-				CC28AED41E17811F00B0C1D0 /* cjson.c in Sources */,
 				CCD4C4871DA897C1000630A5 /* sae_connection.c in Sources */,
 				CC645C7B1DA22CAD00E32EB1 /* sae_table.c in Sources */,
 				CC645C921DA3CD9300E32EB1 /* sae_parse.c in Sources */,
