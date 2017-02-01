@@ -25,7 +25,7 @@ struct sae_heap_s
 
 sae_heap_t *sae_heap_create(sae_uint_t n, sae_heap_elt_cmp cmp);
 
-sae_bool_t sae_heap_push(sae_heap_t *heap, sae_void_t *data);
+sae_heap_elt_t *sae_heap_push(sae_heap_t *heap, sae_void_t *data);
 
 sae_bool_t sae_heap_del(sae_heap_t *heap, sae_heap_elt_t *elt);
 
@@ -33,7 +33,9 @@ sae_void_t *sae_heap_value_min_get(sae_heap_t *heap);
 
 sae_void_t sae_heap_destroy(sae_heap_t *heap);
 
+#if 0
 sae_bool_t sae_heap_del_value(sae_heap_t *heap, sae_void_t *data);
+#endif
 
 sae_uint_t sae_heap_size_get(sae_heap_t *heap);
 

@@ -58,7 +58,7 @@ sae_log_t *sae_log_create(sae_char_t *dir)
     }
     
     /*gen file*/
-    for (type = LDEBUG; type <= LDUMP; type++)
+    for (type = LDEBUG; type < LTYPE; ++type)
     {
         log->files[type] = sae_log_file(log, type);
         if (!log->files[type])
@@ -79,7 +79,7 @@ sae_void_t sae_log_destroy(sae_log_t *log)
     log->valid = sae_false;
     
     /*close log file*/
-    for (type = LDEBUG; type <= LDUMP; type++)
+    for (type = LDEBUG; type < LTYPE; ++type)
     {
         sae_file_close(log->files[type]);
     }

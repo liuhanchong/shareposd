@@ -26,13 +26,15 @@ sae_list_t *sae_list_create();
 
 sae_void_t sae_list_destroy(sae_list_t *list);
 
-sae_bool_t sae_list_push(sae_list_t *list, sae_void_t *data);
+sae_list_node_t *sae_list_push(sae_list_t *list, sae_void_t *data);
 
 sae_bool_t sae_list_del(sae_list_t *list, sae_list_node_t *node);
 
 sae_bool_t sae_list_empty(sae_list_t *list);
 
+#if 0
 sae_bool_t sae_list_del_value(sae_list_t *list, sae_void_t *data);
+#endif
 
 sae_bool_t sae_list_clear(sae_list_t *list);
 

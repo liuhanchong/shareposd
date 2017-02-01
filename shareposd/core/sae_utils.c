@@ -32,7 +32,7 @@ sae_bool_t sae_utils_process_deamon()
     
     /*close fd*/
     return (sae_file_fd_close(STDIN_FILENO)  &&
-            sae_file_fd_close(STDOUT_FILENO) &&
+//            sae_file_fd_close(STDOUT_FILENO) &&
             sae_file_fd_close(STDERR_FILENO)) ? sae_true : sae_false;
 }
 

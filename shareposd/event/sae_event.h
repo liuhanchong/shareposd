@@ -50,6 +50,8 @@ struct sae_event_s
     sae_void_t *event_call_arg;
     struct timeval event_timer_end;/*timer end*/
     struct timeval event_timer_wait;/*wait time*/
+    sae_heap_elt_t *event_timer_heap_elt;/*heap pos*/
+    sae_list_node_t *event_signal_list_node;/*list pos*/
     sae_event_t *event_next;
 };
 

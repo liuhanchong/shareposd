@@ -192,7 +192,7 @@ sae_bool_t sae_kqueue_dispatch(sae_event_base_t *base, struct timeval *tv, sae_v
     /*clear change list*/
     kq->event_list_change_len = 0;
     
-    for (i = 0; i < ret; i++)
+    for (i = 0; i < ret; ++i)
     {
         if (event_list[i].flags & EV_ERROR)
         {

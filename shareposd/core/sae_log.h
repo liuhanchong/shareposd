@@ -15,9 +15,10 @@ enum sae_log_type_e
     LDEBUG = 0,
     LERROR,
     LOTHER,
-    /*add new type there, not in LDUMP back*/
     LDUMP,
-    LEXIT /*special type, therfore not in LDUMP before add*/
+    /*add new type there, not in LTYPE back*/
+    LTYPE,
+    LEXIT /*special type, therfore not in LTYPE before add*/
 };
 
 struct sae_log_s

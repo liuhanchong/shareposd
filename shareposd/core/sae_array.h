@@ -22,7 +22,7 @@ sae_array_t *sae_array_create(sae_uint_t n, sae_size_t size);
 
 sae_void_t   sae_array_destroy(sae_array_t *array);
 
-#if 1
+#if 0
 sae_void_t  *sae_array_push(sae_array_t *array);
 #endif
 

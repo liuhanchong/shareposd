@@ -91,13 +91,13 @@ sae_heap_t *sae_heap_create(sae_uint_t n, sae_heap_elt_cmp cmp)
     return heap;
 }
 
-sae_bool_t sae_heap_push(sae_heap_t *heap, sae_void_t *data)
+sae_heap_elt_t *sae_heap_push(sae_heap_t *heap, sae_void_t *data)
 {
     sae_heap_elt_t *last_elt = sae_null;
     
     if (heap->nelts >= heap->head->nalloc)
     {
-        return sae_false;
+        return sae_null;
     }
     
     /*data set in last elt*/
@@ -105,7 +105,13 @@ sae_bool_t sae_heap_push(sae_heap_t *heap, sae_void_t *data)
     last_elt->data = data;
     last_elt->pos = heap->nelts;
     
-    return sae_heap_elt_move_up(heap, last_elt);
+    if (!sae_heap_elt_move_up(heap, last_elt))
+    {
+        heap->nelts--;
+        return sae_null;
+    }
+    
+    return last_elt;
 }
 
 sae_bool_t sae_heap_del(sae_heap_t *heap, sae_heap_elt_t *elt)
@@ -132,7 +138,7 @@ sae_bool_t sae_heap_del_value(sae_heap_t *heap, sae_void_t *data)
     sae_uint_t i = 0;
     sae_heap_elt_t *elt = sae_null;
 
-    for (i = 0; i < heap->nelts; i++)
+    for (i = 0; i < heap->nelts; ++i)
     {
         elt = sae_array_value_get(heap->head, i);
         if (elt->data == data)

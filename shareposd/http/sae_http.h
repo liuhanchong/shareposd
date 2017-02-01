@@ -47,7 +47,7 @@ struct sae_http_s
 #include "sae_http_request.h"
 #include "tp/klhttp-in.h"
 
-sae_http_t *sae_http_create(sae_cycle_conf_t *cycle);
+sae_http_t *sae_http_create(sae_cycle_conf_t *cycle_conf);
 
 sae_bool_t sae_http_destroy(sae_http_t *http);
 

@@ -20,9 +20,9 @@ static sae_bool_t sae_http_handle(sae_event_t *event)
     return sae_true;
 }
 
-sae_http_t *sae_http_create(sae_cycle_conf_t *cycle)
+sae_http_t *sae_http_create(sae_cycle_conf_t *cycle_conf)
 {
-    assert(cycle);
+    assert(cycle_conf);
     
     sae_http_t *http = sae_null;
     sae_uint_t i = 0;
@@ -50,13 +50,13 @@ sae_http_t *sae_http_create(sae_cycle_conf_t *cycle)
         return sae_null;
     }
     
-    sae_socket_aton(cycle->cycle_core->ip, &addr);
-    port = sae_socket_htons(cycle->cycle_core->port);
+    sae_socket_aton(cycle_conf->cycle_core->ip, &addr);
+    port = sae_socket_htons(cycle_conf->cycle_core->port);
     
-    for (i = 0; i < http->http_server_listens->nelts; i++)
+    for (i = 0; i < http->http_server_listens->nelts; ++i)
     {
-        listen = sae_array_push(http->http_server_listens);
-        http_server = sae_array_push(http->http_servers);
+        listen = sae_array_push_index(http->http_server_listens, i);
+        http_server = sae_array_push_index(http->http_servers, i);
         
         http_server->http = http;
         http_server->http_listen = listen;
@@ -77,7 +77,7 @@ sae_http_t *sae_http_create(sae_cycle_conf_t *cycle)
             return sae_null;
         }
         
-        http_server->http_server_event_base = sae_event_base_create(sae_array_value_get(cycle->cycle_core->event_top_array, 0), sae_http_handle);
+        http_server->http_server_event_base = sae_event_base_create(sae_array_value_get(cycle_conf->cycle_core->event_top_array, 0), sae_http_handle);
         if (!http_server->http_server_event_base)
         {
             return sae_null;
@@ -102,7 +102,7 @@ sae_bool_t sae_http_destroy(sae_http_t *http)
     sae_uint_t i = 0;
     sae_http_server_t *http_server = sae_null;
     
-    for (i = 0; i < http->http_servers->nelts; i++)
+    for (i = 0; i < http->http_servers->nelts; ++i)
     {
         http_server = sae_array_value_get(http->http_servers, i);
         

@@ -24,4 +24,8 @@ struct sae_cycle_conf_s
     sae_cycle_core_t *cycle_core;
 };
 
+sae_cycle_conf_t *sae_cycle_conf_create();
+
+sae_void_t sae_cycle_conf_destroy(sae_cycle_conf_t *cycle);
+
 #endif /* _SAE_CYCLE_H_INCLUDED_ */

@@ -36,13 +36,13 @@ sae_void_t sae_list_destroy(sae_list_t *list)
     sae_alloc_free(list);
 }
 
-sae_bool_t sae_list_push(sae_list_t *list, sae_void_t *data)
+sae_list_node_t *sae_list_push(sae_list_t *list, sae_void_t *data)
 {
     /*alloc node*/
     sae_list_node_t *node = sae_alloc(sae_sizeof(sae_list_node_t));
     if (!node)
     {
-        return sae_false;
+        return sae_null;
     }
     
     /*init node*/
@@ -62,7 +62,7 @@ sae_bool_t sae_list_push(sae_list_t *list, sae_void_t *data)
     /*move last*/
     list->last = node;
     
-    return sae_true;
+    return node;
 }
 
 sae_bool_t sae_list_del(sae_list_t *list, sae_list_node_t *node)
@@ -128,7 +128,6 @@ sae_bool_t sae_list_del_value(sae_list_t *list, sae_void_t *data)
 }
 sae_bool_t sae_list_clear(sae_list_t *list)
 {
-    
     while (!sae_list_empty(list))
     {
         sae_list_del(list, list->head);

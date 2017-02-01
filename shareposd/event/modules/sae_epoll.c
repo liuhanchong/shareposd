@@ -140,7 +140,7 @@ sae_bool_t sae_epoll_dispatch(sae_event_base_t *base, struct timeval *tv, sae_vo
         return sae_true;
     }
     
-    for (i = 0; i < ret; i++)
+    for (i = 0; i < ret; ++i)
     {
         if (event_list[i].events & EV_ERROR)
         {

@@ -97,7 +97,7 @@ static sae_bool_t sae_event_signal_active_get(sae_event_base_t *base)
     
     base->event_signal_state = sae_false;
     
-    for (i = 1; i < SAE_SIGNAL_NUM; i++)
+    for (i = 1; i < SAE_SIGNAL_NUM; ++i)
     {
         /*is signal active*/
         if ((sig = base->event_signal_array_active[i]) == 0)
@@ -133,7 +133,7 @@ static sae_bool_t sae_event_timer_active_get(sae_event_base_t *base)
     struct timeval tv = {time(sae_null), 0};
     sae_event_t *event = sae_null;
     
-    for (i = 0; i < sae_heap_size_get(base->event_heap_timer); i++)
+    for (i = 0; i < sae_heap_size_get(base->event_heap_timer); ++i)
     {
         event = sae_heap_value_get(base->event_heap_timer, i);
         
@@ -223,7 +223,7 @@ sae_bool_t sae_event_add(sae_event_t *event, struct timeval *tv)
             return sae_false;
         }
         
-        if (!sae_list_push(event->event_base->event_list_signal, event))
+        if (!(event->event_signal_list_node = sae_list_push(event->event_base->event_list_signal, event)))
         {
             return sae_false;
         }
@@ -234,8 +234,8 @@ sae_bool_t sae_event_add(sae_event_t *event, struct timeval *tv)
         
         sae_memcpy(&event->event_timer_end, tv, sae_sizeof(struct timeval));
         event->event_timer_end.tv_sec += time(sae_null);
-        
-        if (!sae_heap_push(event->event_base->event_heap_timer, event))
+
+        if (!(event->event_timer_heap_elt = sae_heap_push(event->event_base->event_heap_timer, event)))
         {
             return sae_false;
         }
@@ -262,14 +262,14 @@ sae_bool_t sae_event_del(sae_event_t *event)
             return sae_false;
         }
         
-        if (!sae_list_del_value(event->event_base->event_list_signal, event))
+        if (!sae_list_del(event->event_base->event_list_signal, event->event_signal_list_node))
         {
             return sae_false;
         }
     }
     else if (event->event_flag & SAE_EVENT_TIMER)
     {
-        if (!sae_heap_del_value(event->event_base->event_heap_timer, event))
+        if (!sae_heap_del(event->event_base->event_heap_timer, event->event_timer_heap_elt))
         {
             return sae_false;
         }
@@ -303,7 +303,7 @@ sae_bool_t sae_event_active(sae_event_t *event)
     
     event->event_state |= SAE_EVENT_STATE_ACTIVE;
 
-    return sae_list_push(event->event_base->event_list_active, event);
+    return sae_list_push(event->event_base->event_list_active, event) ? sae_true : sae_false;
 }
 
 sae_void_t sae_event_free(sae_event_t *event)

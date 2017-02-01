@@ -46,7 +46,7 @@ sae_void_t sae_table_destroy(sae_table_t *table)
     sae_list_node_t *node = sae_null;
     
     /*free list node*/
-    for (i = 0; i < table->table->nalloc; i++)
+    for (i = 0; i < table->table->nalloc; ++i)
     {
         list = sae_table_list_get(table, i);
         if (list)
