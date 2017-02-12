@@ -60,7 +60,7 @@ sae_file_t *sae_file_open(sae_cchar_t *path, sae_file_op_t op)
         sae_free(file);
         return sae_null;
     }
-    sae_cp_str(file->path, path, len);
+    sae_str_cp(file->path, path, len);
     
     /*open file*/
     sys_op = sae_file_get_sys_op(op);

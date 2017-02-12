@@ -148,12 +148,14 @@ sae_void_t *sae_http_request_accept(sae_event_t *event, sae_void_t *arg)
     
     if (!(http_client_event = sae_event_socket_set(event->event_base, http_client_fd, SAE_EVENT_READ | SAE_EVENT_PERSIST, sae_http_request_read, http_server)))
     {
+        sae_socket_close(http_client_fd);
         sae_log(LERROR, "sae_http_accept->sae_event_socket_set failed client fd is %d", http_client_fd);
         return sae_null;
     }
     
     if (!sae_event_socket_add(http_client_event))
     {
+        sae_socket_close(http_client_fd);
         sae_event_free(http_client_event);
         sae_log(LERROR, "sae_http_accept->sae_event_socket_add failed client fd is %d", http_client_fd);
         return sae_null;
@@ -168,12 +170,7 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     http_request_t *request = sae_null;
     sae_http_packet_t *request_packet = sae_null;
     sae_buffer_t *response_buffer = sae_null;
-    sae_buffer_t *result_buffer = sae_buffer_create();
-    if (!result_buffer)
-    {
-        sae_log(LERROR, "sae_http_request_read sae_buffer_create failed, the client fd is %d", event->event_fd);
-        return sae_null;
-    }
+    sae_buffer_t *result_buffer = sae_null;
     
     /*get packet*/
     if (!(request_packet = sae_http_request_packet_get(http_server, event)))
@@ -184,6 +181,10 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     /*read data*/
     if (!sae_http_packet_read(request_packet))
     {
+        sae_http_packet_del(request_packet);
+        sae_http_packet_destroy(request_packet);
+        sae_socket_close(event->event_fd);
+        sae_event_free(event);
         sae_log(LERROR, "sae_http_request_read read packet data failed, the client fd is %d", event->event_fd);
         return sae_null;
     }
@@ -208,6 +209,13 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
         http_request_free(request);
         sae_buffer_destroy(response_buffer);
         sae_log(LERROR, "sae_http_request_read del packet failed, the client fd is %d", event->event_fd);
+        return sae_null;
+    }
+    
+    result_buffer = sae_buffer_create();
+    if (!result_buffer)
+    {
+        sae_log(LERROR, "sae_http_request_read sae_buffer_create failed, the client fd is %d", event->event_fd);
         return sae_null;
     }
     

@@ -73,14 +73,12 @@ sae_int_t sae_space(sae_int_t c);
 #define sae_snprintf(str, len, format, ...) snprintf(str, len, format, __VA_ARGS__)
 #define sae_vsnprintf(str, len, format, arg_list) vsnprintf(str, len, format, arg_list)
 
-#define sae_cp_str(dst, src, n) \
-sae_memcpy(dst, src, len); \
-dst[len] = sae_str_end;
-
 sae_ulong_t sae_str_hash(sae_char_t *str);
 
 sae_void_t sae_str_trim(sae_char_t *str);
 
 sae_char_t *sae_int_to_str(sae_int_t v);
+
+sae_void_t sae_str_cp(sae_char_t *dst, sae_cchar_t *src, sae_size_t n);
 
 #endif /* _LINUX_BASE_H_INCLUDED_ */

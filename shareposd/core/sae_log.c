@@ -45,7 +45,7 @@ sae_log_t *sae_log_create(sae_char_t *dir)
         sae_alloc_free(log);
         return sae_null;
     }
-    sae_cp_str(log->dir, dir, len);
+    sae_str_cp(log->dir, dir, len);
     
     /*create log dir*/
     if (!sae_dir_exist(log->dir))

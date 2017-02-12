@@ -222,3 +222,9 @@ sae_char_t *sae_int_to_str(sae_int_t v)
     return buf;
 }
 
+sae_void_t sae_str_cp(sae_char_t *dst, sae_cchar_t *src, sae_size_t n)
+{
+    sae_memcpy(dst, src, n);
+    dst[n] = sae_str_end;
+}
+

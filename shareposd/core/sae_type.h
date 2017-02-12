@@ -80,7 +80,7 @@ typedef sae_void_t *(*sae_thread_task)(sae_void_t *);
 #define SAE_LOG_SIZE (sae_kb / 2) /*every log info max len*/
 #define SAE_LOG_PATH_LEN (sae_kb / 4) /*log path max len*/
 #define SAE_PARSE_ROW_MAX_LEN (sae_kb / 4)
-#define SAE_BUFFER_MAX_LEN 65536
+#define SAE_BUFFER_MAX_LEN 65535
 #define SAE_BUFFER_INIT_LEN 1024
 #define SAE_BUFFER_LINE_FLAG "\n"
 
