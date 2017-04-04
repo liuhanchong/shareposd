@@ -29,17 +29,17 @@ static http_request_t *sae_http_request_valid(sae_http_packet_t *packet)
     return sae_null;
 }
 
-static sae_http_packet_t *sae_http_request_packet_get(sae_http_server_t *http_server, sae_event_t *event)
+static sae_http_packet_t *sae_http_request_packet_get(sae_http_packet_table_t *http_requset_packet_table, sae_event_t *event)
 {
     sae_http_packet_t *packet = sae_null;
     
-    if ((packet = sae_table_value(http_server->http_requset_packet_table->packet, event->event_fd_str)))
+    if ((packet = sae_table_value(http_requset_packet_table->packet, event->event_fd_str)))
     {
         return packet;
     }
     
     /*add new packet*/
-    if (!(packet = sae_http_packet_create(event->event_fd, http_server->http_requset_packet_table)))
+    if (!(packet = sae_http_packet_create(event->event_fd, http_requset_packet_table)))
     {
         sae_log(LERROR, "sae_http_read create new packet failed, the client fd is %d", event->event_fd);
         return sae_null;
@@ -173,7 +173,7 @@ sae_void_t *sae_http_request_read(sae_event_t *event, sae_void_t *arg)
     sae_buffer_t *result_buffer = sae_null;
     
     /*get packet*/
-    if (!(request_packet = sae_http_request_packet_get(http_server, event)))
+    if (!(request_packet = sae_http_request_packet_get(http_server->http_requset_packet_table, event)))
     {
         return sae_null;
     }

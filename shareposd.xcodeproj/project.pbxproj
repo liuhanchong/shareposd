@@ -31,7 +31,7 @@
 		CCD4C4871DA897C1000630A5 /* sae_connection.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C4851DA897C1000630A5 /* sae_connection.c */; };
 		CCD4C48A1DA8A3AA000630A5 /* sae_cycle.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C4881DA8A3AA000630A5 /* sae_cycle.c */; };
 		CCD4C4901DAA0904000630A5 /* sae_times.c in Sources */ = {isa = PBXBuildFile; fileRef = CCD4C48E1DAA0904000630A5 /* sae_times.c */; };
-		CCFC14FE1E504F4A00BA6FE0 /* sae_memory.c in Sources */ = {isa = PBXBuildFile; fileRef = CCFC14FC1E504F4A00BA6FE0 /* sae_memory.c */; };
+		CCFC14FE1E504F4A00BA6FE0 /* sae_memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCFC14FC1E504F4A00BA6FE0 /* sae_memory.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -113,7 +113,7 @@
 		CCD4C48E1DAA0904000630A5 /* sae_times.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_times.c; path = core/sae_times.c; sourceTree = "<group>"; };
 		CCD4C48F1DAA0904000630A5 /* sae_times.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_times.h; path = core/sae_times.h; sourceTree = "<group>"; };
 		CCF48D301D969896003F2611 /* shareposd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = shareposd; sourceTree = BUILT_PRODUCTS_DIR; };
-		CCFC14FC1E504F4A00BA6FE0 /* sae_memory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sae_memory.c; path = core/sae_memory.c; sourceTree = "<group>"; };
+		CCFC14FC1E504F4A00BA6FE0 /* sae_memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sae_memory.cpp; path = core/sae_memory.cpp; sourceTree = "<group>"; };
 		CCFC14FD1E504F4A00BA6FE0 /* sae_memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sae_memory.h; path = core/sae_memory.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -224,6 +224,15 @@
 			name = modules;
 			sourceTree = "<group>";
 		};
+		CCCEA7281E61573F001C48A4 /* alloc */ = {
+			isa = PBXGroup;
+			children = (
+				CCFC14FC1E504F4A00BA6FE0 /* sae_memory.cpp */,
+				CCFC14FD1E504F4A00BA6FE0 /* sae_memory.h */,
+			);
+			name = alloc;
+			sourceTree = "<group>";
+		};
 		CCF48D271D969896003F2611 = {
 			isa = PBXGroup;
 			children = (
@@ -256,6 +265,7 @@
 		CCF48D3A1D9698A7003F2611 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				CCCEA7281E61573F001C48A4 /* alloc */,
 				CCC176701DE053310013E5D5 /* config.h */,
 				CC645C641D9FC4D200E32EB1 /* sae_alloc.c */,
 				CC645C651D9FC4D200E32EB1 /* sae_alloc.h */,
@@ -284,8 +294,6 @@
 				CC36481D1DF2BAF800181174 /* sae_buffer.c */,
 				CC36481E1DF2BAF800181174 /* sae_buffer.h */,
 				CCC704151E405CFB00ED541A /* sae_type.h */,
-				CCFC14FC1E504F4A00BA6FE0 /* sae_memory.c */,
-				CCFC14FD1E504F4A00BA6FE0 /* sae_memory.h */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -365,7 +373,7 @@
 				CC645C7B1DA22CAD00E32EB1 /* sae_table.c in Sources */,
 				CC645C921DA3CD9300E32EB1 /* sae_parse.c in Sources */,
 				CC645C831DA275D000E32EB1 /* sae_heap.c in Sources */,
-				CCFC14FE1E504F4A00BA6FE0 /* sae_memory.c in Sources */,
+				CCFC14FE1E504F4A00BA6FE0 /* sae_memory.cpp in Sources */,
 				CC645C661D9FC4D200E32EB1 /* sae_alloc.c in Sources */,
 				CC994F1E1DAF284300048BE0 /* sae_kqueue.c in Sources */,
 				CC2FEDD91E418C9D0042CC0C /* linux_base.c in Sources */,
